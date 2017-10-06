@@ -1,0 +1,7 @@
+As an authenticated user, I can click on a GIF and it will be enlarged in a pop-up which has options to “Like,” “Dislike,” “Tweet,” or “Copy Link” the GIF displayed below it. 
+	
+If I click on “Like” and I have not liked the GIF in the past it will be saved to my likes. If I have liked the GIF in the past, it will be removed from my likes. If I click on “Dislike” and I have not disliked the GIF in the past it will be saved to my dislikes. If I have disliked the GIF in the past, it will be removed from my dislikes. 
+
+If I click on “Tweet,” I will be shown a pop up of a drafted Twitter post. I can choose to write a Tweet and share. 
+
+If I click on “Copy Link” a hyperlink will be copied.
