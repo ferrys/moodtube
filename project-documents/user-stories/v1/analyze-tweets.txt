@@ -1,5 +1,5 @@
-As an authenticated user I will see a home screen with an “Analyze My Mood” button. If I click on this button, I will be given two buttons, either “Pick a Mood” or “Analyze My Tweets.” 
+﻿As an authenticated user I will see a home screen with an “Analyze My Mood” button. If I click on this button, I will be given two buttons: either “Pick a Mood” or “Analyze My Tweets.”
 	
-If I click “Pick My Mood,” I will be given a list of options which includes common moods, such as  “sad,” “angry,” or “happy.”  If I click on an option, the home page will be updated to the GIFs that reflect my choice. If I click on another option, the GIFs will be updated to the refined search.
+If I click “Pick a Mood,” I will be given a list of options including common moods with keywords such as “sad,” “angry,” or “happy.” If I click on one option, the home page will be updated to show GIFs/images that reflect my choice. If I click on another option, the GIFs/images will be updated to reflect the refined search.
 
-If I click “Analyze My Tweets,” I will see a loading GIF and then the homepage will update to reflect my mood based on Twitter sentiment analysis.
+If I click “Analyze My Tweets,” I will see a loading screen with a GIF and then the homepage will update to reflect my mood based on Twitter sentiment analysis.
