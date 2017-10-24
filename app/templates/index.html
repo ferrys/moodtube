@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>moodtube</title>
+</head>
+
+<body>
+	<form method="post" action="/giphy">
+  		<input type="search" name="keyword" />
+  		<input type="submit" value="Search" />
+  		{% if result %}
+  			<!-- figure out how to display gif returned from api call here -->
+  			<h4>{{result}}</h4>
+  		{% endif %}
+  	</form>
+</body>
+</html>
