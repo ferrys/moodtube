@@ -1,1 +1,2 @@
-As an authenticated user, I have the option to logout. If I click the logout button located at the top right corner of the screen, then I will be logged out and redirected to a screen with GIFs related to “bye” or “sad.”
+﻿As an authenticated user, I have the option to logout. If I click the logout button located at the top right corner of the screen, then I will be logged out and redirected to a screen with GIFs related to keywords such as “bye” or “sad.”
+
