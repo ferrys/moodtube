@@ -11,14 +11,13 @@ def main():
 @app.route("/giphy", methods=["POST"])
 def call_giphy_api():
 	search_value = request.form.get('keyword')
-	# call giphy api here! 
 	# pass parsed api contents in `result` to html
 	api_key = get_api_key("creds.txt")
 	data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
-	print(json.dumps(data, sort_keys=True, indent=4))
-	result = json.dumps(data, sort_keys=True, indent=4)
-	print("+".join(search_value.split(" ")))
-	return render_template('index.html', result=result)
+	urls = []
+	for element in data["data"]:
+		urls += [element["embed_url"]]
+	return render_template('index.html', result=urls)
 
 def get_api_key(file_name):
 	f = open(file_name, "r")
