@@ -6,28 +6,28 @@
 </head>
 
 <body>
-	<h1 class="title">moodTUBE</h1>
+
+	<h1 class="title"><a href="/">moodTUBE</a></h1>
 	<form method="post" action="/giphy">
   		<input type="search" name="keyword" />
-  		<input type="submit" value="Search" />
+  		<input type="submit" value="Search" /><p>
   		{% if result %}
   			{% for url in result %}
-  			<iframe src={{url}} width="480" height="349" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href={{url}}>via GIPHY</a></p>
+				<iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
   			{% endfor %}
 
   		{% endif %}
   	</form>
 
-<div class="result">
-  <p class="no-result center">
-    With a simple call to the <a href="https://github.com/giphy/GiphyAPI">Giphy Api</a> the user will recieve gifs based on their search!
-    <br /> <br />
-    Here is a link to the <a href="https://github.com/ferrys/moodtube">Github Repo</a>
-    <br /> <br />
-    By: Sarah, Jordan, Ryan, Ray, Sonya
-  </p>
-</div>
-
+	<div class="result">
+	  <p class="no-result center">
+	    With a simple call to the <a href="https://github.com/giphy/GiphyAPI">Giphy Api</a> the user will recieve gifs based on their search!
+	    <br /> <br />
+	    Here is a link to the <a href="https://github.com/ferrys/moodtube">Github Repo</a>
+	    <br /> <br />
+	    By: Sarah, Jordan, Ryan, Ray, Sonya
+	  </p>
+	</div>
 
 </body>
 </html>
