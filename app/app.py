@@ -3,8 +3,8 @@ import json
 from urllib.request import urlopen
 from likes import Likes
 from user import User
-from random import randint
 from dislikes import Dislikes
+from random import randint
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
@@ -14,7 +14,7 @@ dislikes = Dislikes()
 
 @app.route("/")
 def main():
-    test_call_database()
+    test_database_calls()
     return render_template('index.html')
 
 @app.route("/giphy", methods=["POST"])
@@ -29,13 +29,20 @@ def call_giphy_api():
         urls += [element["embed_url"]]
     return render_template('index.html', result=urls)
 
-def test_call_database():
-    user_id = randint(1,10000)
-    print(user_id)
-    user.set_user(user_id, 'test', 'asidf38iawef8y')
-    print(user.get_user(user_id))
+def test_database_calls():
+    random_user = randint(1, 1000)
+    user_id = user.create_user('test_user' + str(random_user), 'asidf38iawef8y')
+    username = user.get_username(user_id)
+    print(username)
+    print(user.get_user_id_from_username(username))
+
+    user.set_twitter_username(user_id, 'test_username')
+    user.set_twitter_api_key(user_id, '8owaeifs98y32ohr8yewohif')
+    print(user.get_twitter_info(user_id))
+    
     likes.set_likes(user_id, 'http')
     print(likes.get_likes(user_id))
+    
     dislikes.set_dislikes(user_id, 'http')
     print(dislikes.get_dislikes(user_id))
 
