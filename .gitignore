@@ -1,2 +1,4 @@
 .DS_Store
+config.cfg
+__pycache__
 creds.txt
