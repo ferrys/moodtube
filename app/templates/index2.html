@@ -2,18 +2,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>moodTUBE</title>
-
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="cover.css" rel="stylesheet">
+
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
@@ -35,67 +33,66 @@
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
-                  <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
-                  
+                  <li><a href=a href="https://github.com/ferrys/moodtube">Github Repo</a><br /> <br />></li>
+                  <li><a href="#">Contact</a></li>
                 </ul>
-                <svg width="960" height="500"></svg>
-                <script src="https://d3js.org/d3.v4.min.js"></script>
-                <script>
-
-                var svg = d3.select("svg"),
-                    width = +svg.attr("width"),
-                    height = +svg.attr("height"),
-                    angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
-
-                var path = svg.append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                    .attr("fill", "none")
-                    .attr("stroke-width", 10)
-                    .attr("stroke-linejoin", "round")
-                  .selectAll("path")
-                  .data(["cyan", "magenta", "yellow"])
-                  .enter().append("path")
-                    .attr("stroke", function(d) { return d; })
-                    .style("mix-blend-mode", "darken")
-                    .datum(function(d, i) {
-                      return d3.radialLine()
-                          .curve(d3.curveLinearClosed)
-                          .angle(function(a) { return a; })
-                          .radius(function(a) {
-                            var t = d3.now() / 1000;
-                            return 200 + Math.cos(a * 8 - i * 2 * Math.PI / 3 + t) * Math.pow((1 + Math.cos(a - t)) / 2, 3) * 32;
-                          });
-                    });
-
-                d3.timer(function() {
-                  path.attr("d", function(d) {
-                    return d(angles);
-                  });
-                });
-
-                </script>
               </nav>
             </div>
           </div>
 
           <div class="inner cover">
-            <h1 class="cover-heading">moodTUBE</h1>
+            <h1 class="cover-heading">moodTUBE.</h1>
             <p class="lead">Using our twitter sentiment analysis, we can suggest gif's based on your emotional state! tread carefully, or you may be exposed to lol's</p>
             <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
+              <a href="#" class="btn btn-lg btn-default">SEARCH HERE</a>
             </p>
           </div>    <form method="post" action="/giphy">
           <input type="search" name="keyword" />
           <input type="submit" value="Search" />
           {% if result %}
               {% for url in result %}
-              <iframe src={{url}} width="480" height="349" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href={{url}}>view fullscreen</a></p>
+              <iframe src={{url}} width="480" height="349" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href={{url}}>via GIPHY</a></p>
               {% endfor %}
 
           {% endif %}
       </form>
 
-          
+          <svg width="960" height="500"></svg>
+          <script src="https://d3js.org/d3.v4.min.js"></script>
+          <script>
+
+          var svg = d3.select("svg"),
+              width = +svg.attr("width"),
+              height = +svg.attr("height"),
+              angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
+
+          var path = svg.append("g")
+              .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+              .attr("fill", "none")
+              .attr("stroke-width", 10)
+              .attr("stroke-linejoin", "round")
+            .selectAll("path")
+            .data(["cyan", "magenta", "yellow"])
+            .enter().append("path")
+              .attr("stroke", function(d) { return d; })
+              .style("mix-blend-mode", "darken")
+              .datum(function(d, i) {
+                return d3.radialLine()
+                    .curve(d3.curveLinearClosed)
+                    .angle(function(a) { return a; })
+                    .radius(function(a) {
+                      var t = d3.now() / 1000;
+                      return 200 + Math.cos(a * 8 - i * 2 * Math.PI / 3 + t) * Math.pow((1 + Math.cos(a - t)) / 2, 3) * 32;
+                    });
+              });
+
+          d3.timer(function() {
+            path.attr("d", function(d) {
+              return d(angles);
+            });
+          });
+
+          </script>
           <div class="result">
             <p class="no-result center">
               With a simple call to the <a href="https://github.com/giphy/GiphyAPI">Giphy Api</a> the user will recieve gifs based on their search!
@@ -105,6 +102,20 @@
               By: Sarah, Jordan, Ryan, Ray, Sonya
             </p>
           </div>
+
+
+
+
+
+
+
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
         </div>
 
       </div>
