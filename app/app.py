@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request
 import json
-from urllib.request import urlopen
 from likes import Likes
 from user import User
 from dislikes import Dislikes
 from random import randint
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
