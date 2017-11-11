@@ -1,13 +1,25 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
+from flaskext.mysql import MySQL
+import flask.ext.login as flask_login
 import json
-from urllib.request import urlopen
 from likes import Likes
 from user import User
 from dislikes import Dislikes
 from random import randint
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 
+#loading, env variables
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
+
+#our site login management
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+#user info
 likes = Likes()
 user = User()
 dislikes = Dislikes()
