@@ -23,7 +23,13 @@ def call_giphy_api():
     # pass parsed api contents in `result` to html
     api_key = app.config['API_KEY']
     data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
+    print(data)
     urls = []
+    
+    # if there are no gifs, display 404 gifs
+    if data["data"] == []:
+        data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+ "404" + "&api_key="+ api_key +"&limit=5").read())
+    
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]

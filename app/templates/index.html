@@ -31,7 +31,7 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">moodTUBE</h3>
+              <h3 class="masthead-brand"><a href="/">moodTUBE</a></h3>
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
@@ -86,10 +86,10 @@
             </p>
           </div>    <form method="post" action="/giphy">
           <input type="search" name="keyword" />
-          <input type="submit" value="Search" />
+          <input type="submit" value="Search" /><p>
           {% if result %}
               {% for url in result %}
-              <iframe src={{url}} width="480" height="349" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href={{url}}>view fullscreen</a></p>
+                  <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
               {% endfor %}
 
           {% endif %}
