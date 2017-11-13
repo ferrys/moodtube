@@ -33,13 +33,14 @@ def main():
 def call_giphy_api():
     search_value = request.form.get('keyword')
     # pass parsed api contents in `result` to html
-    api_key = app.config['API_KEY']
+    api_key = app.config['GFY_KEY']
     data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
     urls = []
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
     return render_template('index.html', result=urls)
+
 
 def test_database_calls():
     random_user = randint(1, 1000)
@@ -51,12 +52,32 @@ def test_database_calls():
     user.set_twitter_username(user_id, 'test_username')
     user.set_twitter_api_key(user_id, '8owaeifs98y32ohr8yewohif')
     print(user.get_twitter_info(user_id))
-    
+
     likes.set_likes(user_id, 'http')
     print(likes.get_likes(user_id))
-    
+
     dislikes.set_dislikes(user_id, 'http')
     print(dislikes.get_dislikes(user_id))
+
+@app.route("/twitter/auth",methods=["GET"])
+def twitter_auth():
+	return twitter.authorize_init()
+
+@app.route("/twitter/",methods=["GET"])
+def get_twitter_token():
+    token = request.args.get("oauth_token",None)
+    verifier = request.args.get("oauth_verifier",None)
+    response = twitter.authorize_final(token,verifier)
+
+    token = response[0]
+    secret = response[1]
+    user_id = resonse[2]
+    screen_name = response[3]
+    expires = response[4]
+
+    print(twitter.authorize_final(token,verifier))
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run()
