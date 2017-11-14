@@ -5,7 +5,12 @@ Group project for CS 411
 
 `pip install flask`
 
+`pip install oauth2`
+
+`pip install flask-login`
+
 `python app.py`
+
 
 go to localhost:5000
 
