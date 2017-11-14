@@ -36,7 +36,7 @@
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
                   <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
-                  
+
                 </ul>
                 <svg width="960" height="500"></svg>
                 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -84,6 +84,9 @@
             <p class="lead">
               <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
             </p>
+            <p class="lead">
+              <a href="/twitter/auth" class="btn btn-lg btn-default">Sign in to Twitter</a>
+            </p>
           </div>    <form method="post" action="/giphy">
           <input type="search" name="keyword" />
           <input type="submit" value="Search" /><p>
@@ -95,7 +98,7 @@
           {% endif %}
       </form>
 
-          
+
           <div class="result">
             <p class="no-result center">
               With a simple call to the <a href="https://github.com/giphy/GiphyAPI">Giphy Api</a> the user will recieve gifs based on their search!
