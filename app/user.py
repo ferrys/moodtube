@@ -22,12 +22,13 @@ class User(object):
         query = "UPDATE Users SET twitter_username = '{0}' WHERE user_id = {1}".format(twitter_username, user_id)
         cursor.execute(query)
         self.conn.commit()
-
-    def set_twitter_api_key(self, user_id, twitter_api_key):
+        
+    def set_twitter_id(self, user_id, twitter_id):
         cursor = self.conn.cursor()
-        query = "UPDATE Users SET twitter_api_key = '{0}' WHERE user_id = {1}".format(twitter_api_key, user_id)
+        query = "UPDATE Users SET twitter_user_id = '{0}' WHERE user_id = {1}".format(twitter_id, user_id)
         cursor.execute(query)
         self.conn.commit()
+
 
     def get_user_id_from_username(self, username):
         cursor = self.conn.cursor()
@@ -44,24 +45,8 @@ class User(object):
     # returns twitter_username, twitter_api_key
     def get_twitter_info(self, user_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT twitter_username, twitter_api_key FROM Users WHERE user_id = '{0}'".format(user_id))
+        cursor.execute("SELECT twitter_username FROM Users WHERE user_id = '{0}'".format(user_id))
         response = cursor.fetchone()
-        return response[0], response[1]
+        return response[0]
 
-    def get_temp_twitter_key(self,request_token):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT request_secret FROM Tokens WHERE request_token = '{0}'".format(request_token))
-        secret = response = cursor.fetchone()[0]
-        return secret
 
-    def set_temp_twitter_key(self,request_token, request_secret):
-        cursor = self.conn.cursor()
-        query = "INSERT INTO Tokens(request_token, request_secret) VALUES ('{0}', '{1}')".format(request_token, request_secret)
-        cursor.execute(query)
-        self.conn.commit()
-
-    def del_temp_twitter_key(self,request_token):
-        cursor = self.conn.cursor()
-        query = "DELETE FROM Tokens WHERE request_token='{0}'".format(request_token)
-        cursor.execute(query)
-        self.conn.commit()
