@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flaskext.mysql import MySQL
-import flask_login as flask_login
+import flask_login
 import json
 from likes import Likes
 from user import User
@@ -13,9 +13,11 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
-#loading, env variables
+#mySQL loading (might want to keep it in the separate py files though)
+mysql = MySQL()
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
+mysql.init_app(app)
 
 #our site login management
 login_manager = flask_login.LoginManager()
@@ -26,6 +28,7 @@ likes = Likes()
 user = User()
 dislikes = Dislikes()
 tokens = Tokens()
+
 
 @app.route("/")
 def main():
