@@ -6,6 +6,7 @@ from likes import Likes
 from user import User
 from dislikes import Dislikes
 from random import randint
+import twitter
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -67,21 +68,21 @@ def test_database_calls():
 
 @app.route("/twitter/auth",methods=["GET"])
 def twitter_auth():
-	return twitter.authorize_init()
+	return twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'])
 
 @app.route("/twitter/",methods=["GET"])
 def get_twitter_token():
     token = request.args.get("oauth_token",None)
     verifier = request.args.get("oauth_verifier",None)
-    response = twitter.authorize_final(token,verifier)
+    response = twitter.authorize_final(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],token,verifier)
 
     token = response[0]
     secret = response[1]
-    user_id = resonse[2]
+    user_id = response[2]
     screen_name = response[3]
     expires = response[4]
-
-    print(twitter.authorize_final(token,verifier))
+    print("Twitter Auth Info:")
+    print(response)
 
     return redirect("/")
 
