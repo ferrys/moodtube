@@ -23,6 +23,67 @@
 
   <body>
 
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">moodTUBE</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Login">Login<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Register">Register</a></li>
+            <li><a href="#">moodCHOSE</a></li>
+          </ul>
+          <form class="navbar-form navbar-left" method="post" action="/giphy">
+
+           
+              <input type="search" value="Search" name="keyword" />
+              <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+
+  <!--     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container-fluid">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">moodTUBE</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#Emotions">Emotions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#Login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#Register">Register</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav> -->
+
+
+    <!-- Header -->
+
+
     <div class="site-wrapper">
 
       <div class="site-wrapper-inner">
@@ -31,13 +92,15 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">moodTUBE</h3>
+              <h3 class="masthead-brand"><a href="/">moodTUBE</a></h3>
+              {% if result %}
+                  {% for url in result %}
+                      <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                  {% endfor %}
+
+              {% endif %}              
               <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
-                  <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
-                  
-                </ul>
+
                 <svg width="960" height="500"></svg>
                 <script src="https://d3js.org/d3.v4.min.js"></script>
                 <script>
@@ -77,34 +140,106 @@
               </nav>
             </div>
           </div>
-
+          <section id="Emotions">
           <div class="inner cover">
             <h1 class="cover-heading">moodTUBE</h1>
             <p class="lead">Using our twitter sentiment analysis, we can suggest gif's based on your emotional state! tread carefully, or you may be exposed to lol's</p>
             <p class="lead">
               <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
             </p>
-          </div>    <form method="post" action="/giphy">
-          <input type="search" name="keyword" />
-          <input type="submit" value="Search" />
-          {% if result %}
-              {% for url in result %}
-              <iframe src={{url}} width="480" height="349" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href={{url}}>view fullscreen</a></p>
-              {% endfor %}
-
-          {% endif %}
-      </form>
-
-          
-          <div class="result">
-            <p class="no-result center">
-              With a simple call to the <a href="https://github.com/giphy/GiphyAPI">Giphy Api</a> the user will recieve gifs based on their search!
-              <br /> <br />
-              Here is a link to the <a href="https://github.com/ferrys/moodtube">Github Repo</a>
-              <br /> <br />
-              By: Sarah, Jordan, Ryan, Ray, Sonya
+            <p class="lead">
+              <a href="/twitter/auth" class="btn btn-lg btn-default">Sign in to Twitter</a>
             </p>
+          </div>    
+      </form>
+          </section>      
+
+          <div class="result">
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
+                  <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
+
+                </ul>
           </div>
+    <!-- Login Section -->
+    <section class="success" id="about">
+      <div class="container">
+        <h2 class="text-center">Login</h2>
+        <hr class="star-light">
+        <div class="row">
+          <div class="col-lg-4 mr-auto">
+            <p>Login to your moodTUBE account</p>
+            <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>Email Address</label>
+                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+            <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>Password</label>
+                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your password.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <a href="#" class="btn btn-lg btn-outline">
+              <i class="fa fa-download"></i>
+              <button type="submit" class="btn btn-success btn-lg" id="Login">Login</button>
+            </a>
+          </div>
+          <div class="col-lg-8 mx-auto text-center">
+           
+          </div>
+        </div>
+      </div>
+    </section>
+              <!-- Register Section -->
+    <section id="Register">
+      <div class="container">
+        <h2 class="text-center">Register Account</h2>
+        <hr class="star-primary">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <form name="sentMessage" id="contactForm" novalidate>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>Name</label>
+                  <input class="form-control" id="name" type="text" placeholder="Name" required data-validation-required-message="Please enter your name.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>Email Address</label>
+                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>Password</label>
+                  <input class="form-control" id="phone" type="tel" placeholder="Password" required data-validation-required-message="Please enter your password.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls">
+                  <label>twitter account</label>
+                  <textarea class="form-control" id="twitter accounts" rows="5" placeholder="Enter all twitter names" required data-validation-required-message="Please enter a twitter account."></textarea>
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <br>
+              <div id="success"></div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg" id="sendMessageButton">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
         </div>
 
       </div>
