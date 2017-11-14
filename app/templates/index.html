@@ -32,7 +32,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#portfolio">Select Emotions</a>
+              <a class="nav-link js-scroll-trigger" href="#Emotions">Emotions</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#Login">Login</a>
@@ -46,16 +46,7 @@
     </nav>
 
     <!-- Header -->
-    <header class="masthead">
-      <div class="container">
-        <img class="img-fluid" src="img/profile.png" alt="">
-        <div class="intro-text">
-          <span class="name">moodtube</span>
-          <hr class="star-light">
-          <span class="skills">Analyze Tweets - Sentiment Analisys - Giphs</span>
-        </div>
-      </div>
-    </header>
+
 
     <div class="site-wrapper">
 
@@ -111,7 +102,7 @@
               </nav>
             </div>
           </div>
-
+          <section id="Emotions">
           <div class="inner cover">
             <h1 class="cover-heading">moodTUBE</h1>
             <p class="lead">Using our twitter sentiment analysis, we can suggest gif's based on your emotional state! tread carefully, or you may be exposed to lol's</p>
@@ -121,7 +112,8 @@
             <p class="lead">
               <a href="/twitter/auth" class="btn btn-lg btn-default">Sign in to Twitter</a>
             </p>
-          </div>    <form method="post" action="/giphy">
+          </div>    
+          <form method="post" action="/giphy">
           <input type="search" name="keyword" />
           <input type="submit" value="Search" /><p>
           {% if result %}
@@ -131,7 +123,7 @@
 
           {% endif %}
       </form>
-
+          </section>      
 
           <div class="result">
             <p class="no-result center">
