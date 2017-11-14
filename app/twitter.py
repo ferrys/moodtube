@@ -2,9 +2,9 @@ import oauth2 as oauth
 from user import User
 
 #steps 1 and 2 of authorization
-def authorize_init():
+def authorize_init(key, secret):
 	# Create your consumer with the proper key/secret.
-	consumer = oauth.Consumer(key="SxH9SBByZbahYOjYKmZ2Km0lG", secret="ZtxQAEETppYqoP3jsipi9WkYg8cUcB2wbq7f9VxKXdteCgadoo")
+	consumer = oauth.Consumer(key=key, secret=secret)
 
 	# Request token URL for Twitter.
 	request_token_url = "https://api.twitter.com/oauth/request_token"
@@ -20,6 +20,7 @@ def authorize_init():
 	print(oauth_token,oauth_secret)
 	db = User()
 	db.set_temp_twitter_key(oauth_token,oauth_secret)
+	print(db.get_temp_twitter_key(oauth_token))
 
 	url = "https://api.twitter.com/oauth/authenticate"
 	token = oauth.Token(key=oauth_token, secret=oauth_secret)
@@ -30,10 +31,10 @@ def authorize_init():
 	return content.decode("utf-8")
 
 #step 3 of authorization
-def authorize_final(token, verifier):
+def authorize_final(key, secret, token, verifier):
 	url = "https://api.twitter.com/oauth/access_token"
 
-	consumer = oauth.Consumer(key="SxH9SBByZbahYOjYKmZ2Km0lG", secret="ZtxQAEETppYqoP3jsipi9WkYg8cUcB2wbq7f9VxKXdteCgadoo")
+	consumer = oauth.Consumer(key=key, secret=secret)
 	db = User()
 	secret = db.get_temp_twitter_key(token)
 	token = oauth.Token(key=token, secret=secret)
@@ -46,4 +47,4 @@ def authorize_final(token, verifier):
 
 
 if __name__ == "__main__":
-	authorize()
+	authorize_init()
