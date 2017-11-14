@@ -6,8 +6,7 @@ CREATE TABLE Users(
     username varchar(255) UNIQUE,
     password varchar(255),
     twitter_username VARCHAR(255),
-    twitter_api_key VARCHAR(255),
-    twitter_api_secret VARCHAR(255),
+    twitter_user_id VARCHAR(255),
     CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 
@@ -24,6 +23,10 @@ CREATE TABLE Dislikes(
 );
 
 CREATE TABLE Tokens(
+    user_id INT4 NOT NULL,
     request_token VARCHAR(255),
-    request_secret VARCHAR(255)
+    request_secret VARCHAR(255),
+    oauth_token VARCHAR(255),
+    oauth_token_secret VARCHAR(255),
+    CONSTRAINT tokens_fk FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );

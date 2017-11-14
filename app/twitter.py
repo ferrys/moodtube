@@ -1,5 +1,5 @@
 import oauth2 as oauth
-from user import User
+from tokens import Tokens
 
 #steps 1 and 2 of authorization
 def authorize_init(key, secret):
@@ -18,8 +18,8 @@ def authorize_init(key, secret):
 	oauth_token = str(content)[1:].split("&")[0].split("=")[1]
 	oauth_secret = str(content)[1:].split("&")[1].split("=")[1]
 	print(oauth_token,oauth_secret)
-	db = User()
-	db.set_temp_twitter_key(oauth_token,oauth_secret)
+	db = Tokens()
+	db.set_temp_twitter_key(1, oauth_token,oauth_secret)
 	print(db.get_temp_twitter_key(oauth_token))
 
 	url = "https://api.twitter.com/oauth/authenticate"
@@ -35,7 +35,7 @@ def authorize_final(key, secret, token, verifier):
 	url = "https://api.twitter.com/oauth/access_token"
 
 	consumer = oauth.Consumer(key=key, secret=secret)
-	db = User()
+	db = Tokens()
 	secret = db.get_temp_twitter_key(token)
 	token = oauth.Token(key=token, secret=secret)
 	token.set_verifier(verifier)
