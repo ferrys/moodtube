@@ -1,15 +1,20 @@
 # moodtube
-Group project for CS 411 
+Group project for CS 411
 
 ### To run app:
 
 `pip install flask`
 
+`pip install oauth2`
+
+`pip install flask-login`
+
 `python app.py`
+
 
 go to localhost:5000
 
-### To configure database 
+### To configure database
 - Download MySQl (https://dev.mysql.com/downloads/mysql/)
 - Install the flask connector `pip install flask-mysql`
 
@@ -17,9 +22,11 @@ go to localhost:5000
 - Create file named `config.cfg`
 - The contents should be:
 ```
-API_KEY='your-api-key'
+GFY_KEY='your-api-key'
 MYSQL_DATABASE_USER='root'
 MYSQL_DATABASE_PASSWORD='your-password'
 MYSQL_DATABASE_DB='moodtube'
 MYSQL_DATABASE_HOST='localhost'
+TWITTER_KEY='your-api-key'
+TWITTER_SECRET='your-api-key-secret'
 ```
