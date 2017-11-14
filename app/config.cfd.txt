@@ -1,0 +1,5 @@
+API_KEY='your-api-key'
+MYSQL_DATABASE_USER='root'
+MYSQL_DATABASE_PASSWORD='your-password'
+MYSQL_DATABASE_DB='moodtube'
+MYSQL_DATABASE_HOST='localhost'
