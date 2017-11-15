@@ -4,6 +4,7 @@ USE moodtube;
 CREATE TABLE Users(
     user_id INT4 AUTO_INCREMENT NOT NULL,
     username varchar(255) UNIQUE,
+    email varchar(255) UNIQUE,
     password varchar(255),
     twitter_username VARCHAR(255),
     twitter_user_id VARCHAR(255),
