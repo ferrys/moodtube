@@ -8,6 +8,7 @@ from dislikes import Dislikes
 from tokens import Tokens
 from random import randint
 import twitter
+import loginmanagement
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -31,51 +32,14 @@ tokens = Tokens()
 
 conn = mysql.connect()
 cursor = conn.cursor()
-cursor.execute("SELECT email from Users")
+cursor.execute("SELECT email FROM Users")
 users = cursor.fetchall()
-
-### modulate this out
-def getUsers():
-    cursor = conn.cursor()
-    cursor.execute("SELECT email from Users")
-    return cursor.fetchall()
-
-class User(flask_login.UserMixin):
-    # stub for now, no function
-    pass
-
-@login_manager.user_loader
-def user_loader(email):
-    users = getUsers()
-    if not(email) or email not in str(users):
-        return
-    user = User()
-    user.id = email
-    return user
-
-@login_manager.request_loader
-def request_loader(request):
-    users = getUsers()
-    email = request.form.get('email')
-    if not(email) or email not in str(users):
-        return
-    user = User()
-    user.id = email
-    cursor = mysql.connect().cursor()
-    cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
-    data = cursor.fetchall()
-    pwd = str(data[0][0] )
-    user.is_authenticated = request.form['password'] == pwd
-    return user 
-
-###
 
 @app.route("/")
 def main():
-    test_database_calls()
+    #test_database_calls()
     return render_template('index.html')
 
-###
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if flask.request.method == 'GET':
@@ -113,7 +77,7 @@ def logout():
 def unauthorized_handler():
     return render_template('unauth.html')
  
-#you can specify specific methods (GET/POST) in function header instead of inside the functions as seen earlier
+#we can specify specific methods (GET/POST) in function header
 @app.route("/register", methods=['GET'])
 def register():
     return render_template('register.html', supress='True')  
@@ -121,16 +85,16 @@ def register():
 @app.route("/register", methods=['POST'])
 def register_user():
     try:
+        username=request.form.get('name')
         email=request.form.get('email')
         password=request.form.get('password')
-        username=request.form.get('name')
     except:
-        print "couldn't find all tokens" #this prints to shell, end users will not see this (all print statements go to shell)
+        print "couldn't find all tokens"
         return flask.redirect(flask.url_for('register'))
     cursor = conn.cursor()
-    test =  isEmailUnique(email)
-    if test:
-        cursor.execute("INSERT INTO Users (name, email, password) VALUES ('{0}', '{1}', '{2}')".format(name, email, password))
+    unique =  isEmailUnique(email)
+    if unique:
+        cursor.execute("INSERT INTO Users (username, email, password) VALUES ('{0}', '{1}', '{2}')".format(username, email, password))
         conn.commit()
         #log user in
         user = User()
@@ -140,23 +104,6 @@ def register_user():
     else:
         print "couldn't find all tokens"
         return render_template("register.html", suppress=False)
-
-
-def getUserIdFromEmail(email):
-    cursor = conn.cursor()
-    if cursor.execute("SELECT user_id  FROM Users WHERE email = '{0}'".format(email)):
-        return cursor.fetchone()[0]
-    else:
-        return None
- 
-def isEmailUnique(email):
-    #use this to check if a email has already been registered
-    cursor = conn.cursor()
-    if cursor.execute("SELECT email  FROM Users WHERE email = '{0}'".format(email)):
-        return False
-    else:
-        return True
-###
     
 @app.route("/giphy", methods=["POST"])
 def call_giphy_api():
