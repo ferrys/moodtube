@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flaskext.mysql import MySQL
-import flask_login as flask_login
+import flask_login
 import json
 from likes import Likes
 from user import User
@@ -13,9 +13,11 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
-#loading, env variables
+#mySQL loading (might want to keep it in the separate py files though)
+mysql = MySQL()
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
+mysql.init_app(app)
 
 #our site login management
 login_manager = flask_login.LoginManager()
@@ -40,11 +42,11 @@ def call_giphy_api():
     data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
     print(data)
     urls = []
-    
+
     # if there are no gifs, display 404 gifs
     if data["data"] == []:
         data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+ "404" + "&api_key="+ api_key +"&limit=5").read())
-    
+
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
@@ -76,7 +78,7 @@ def get_twitter_token():
     token = request.args.get("oauth_token",None)
     verifier = request.args.get("oauth_verifier",None)
     response = twitter.authorize_final(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],token,verifier)
-    
+
     # change this once we get a real user id from the native login
     user_id = 1
     token = response[0].split("=")[1]
