@@ -56,6 +56,14 @@ def call_giphy_api(search=None):
         urls += [element["embed_url"]]
     return render_template('index.html', result=urls,tones=search_value)
 
+@app.route("/page/login", methods=["GET"])
+def show_login_page():
+    return render_template("login.html")
+
+@app.route("/page/register",methods=["GET"])
+def show_register_page():
+    return render_template("register.html")
+
 # examples of how to call the database
 def test_database_calls():
     random_user = randint(1, 1000)
