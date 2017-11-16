@@ -9,6 +9,8 @@ Group project for CS 411
 
 `pip install flask-login`
 
+`pip install --upgrade watson-developer-cloud`
+
 `python app.py`
 
 
@@ -29,4 +31,6 @@ MYSQL_DATABASE_DB='moodtube'
 MYSQL_DATABASE_HOST='localhost'
 TWITTER_KEY='your-api-key'
 TWITTER_SECRET='your-api-key-secret'
+IBM_USERNAME='username'
+IBM_PASSWORD='password'
 ```

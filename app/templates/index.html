@@ -46,7 +46,7 @@
           </ul>
           <form class="navbar-form navbar-left" method="post" action="/giphy">
 
-           
+
               <input type="search" value="Search" name="keyword" />
               <button type="submit" class="btn btn-default">Submit</button>
           </form>
@@ -67,12 +67,15 @@
           <div class="masthead clearfix">
             <div class="inner">
               <h3 class="masthead-brand"><a href="/">moodTUBE</a></h3>
+              {% if tones %}
+                <p class="lead">{{tones}}</p>
+              {% endif %}
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                   {% endfor %}
 
-              {% endif %}              
+              {% endif %}
               <nav>
 
                 <svg width="960" height="500"></svg>
@@ -122,11 +125,15 @@
               <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
             </p>
             <p class="lead">
-              <a href="/twitter/auth" class="btn btn-lg btn-default">Sign in to Twitter</a>
+              <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
             </p>
+<<<<<<< HEAD
           </div>    
+=======
+          </div>
+>>>>>>> refs/remotes/origin/master
       </form>
-          </section>      
+          </section>
 
           <div class="result">
                 <ul class="nav masthead-nav">
@@ -163,7 +170,7 @@
             </a>
           </div>
           <div class="col-lg-8 mx-auto text-center">
-           
+
           </div>
         </div>
       </div>
