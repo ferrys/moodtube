@@ -11,7 +11,7 @@ class Tokens(object):
     def get_temp_twitter_key(self, request_token):
         cursor = self.conn.cursor()
         cursor.execute("SELECT request_secret FROM Tokens WHERE request_token = '{0}'".format(request_token))
-        secret = response = cursor.fetchone()[0]
+        secret = cursor.fetchone()[0]
         return secret
 
     def set_temp_twitter_key(self,user_id, request_token, request_secret):
@@ -25,12 +25,14 @@ class Tokens(object):
         query = "DELETE FROM Tokens WHERE request_token='{0}'".format(request_token)
         cursor.execute(query)
         self.conn.commit()
-        
+
     def set_oauth_twitter_tokens(self, user_id, oauth_token, oauth_token_secret):
         cursor = self.conn.cursor()
         query = "UPDATE Tokens SET oauth_token = '{0}', oauth_token_secret = '{1}' WHERE user_id = '{2}'".format(oauth_token, oauth_token_secret, user_id)
         cursor.execute(query)
         self.conn.commit()
-        
-        
-        
+
+    def get_oauth_twitter_tokens(self,user_id):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT oauth_token,oauth_token_secret FROM Tokens WHERE user_id = '{0}'".format(user_id))
+        return cursor.fetchone()

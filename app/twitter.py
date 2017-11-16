@@ -1,5 +1,8 @@
 import oauth2 as oauth
 from tokens import Tokens
+import user
+import json
+from watson_developer_cloud import ToneAnalyzerV3
 
 #steps 1 and 2 of authorization
 def authorize_init(key, secret):
@@ -45,6 +48,70 @@ def authorize_final(key, secret, token, verifier):
 	db.del_temp_twitter_key(token)
 	return content.decode("utf-8").split("&")
 
+def get_tweets(key,secret,user_id,number):
+	if(number >3200):
+		number = 3200
+	db = user.User()
+	screen_name = db.get_twitter_info(user_id)[0]
+	url = generate_url(screen_name,number,None)
+	consumer = oauth.Consumer(key=key, secret=secret)
+	db = Tokens()
+	token = db.get_oauth_twitter_tokens(user_id)
+	key = token[0]
+	secret = token[1]
+	twitter_token = oauth.Token(key,secret)
+	client = oauth.Client(consumer, twitter_token)
+	resp,content = client.request(url,"GET")
+
+	tweets = []
+	remaining = number
+
+	while remaining > 0:
+		resp,content = client.request(url,"GET")
+		jsoned = json.loads(content)
+		if len(tweets) != 0:
+			jsoned = jsoned[1:]
+		if len(jsoned) == 0:
+			break
+		tweets+=jsoned
+		remaining -= len(jsoned)
+		url = generate_url(screen_name,remaining,jsoned[-1]["id_str"])
+	print(len(tweets))
+	text = ""
+	for i in tweets:
+		text+= i["text"]+"\n"
+	return text
+
+def generate_url(screen_name,count,max_id):
+	url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name="
+	url+=screen_name
+	url+="&count="
+	if count > 200:
+		url+="200"
+	else:
+		url+=str(count)
+	if max_id != None:
+		url+="&max_id="
+		url+=max_id
+	return url
+
+
+def get_tone(username, password, text):
+	url = "https://gateway.watsonplatform.net/authorization/api/v1/token"
+	tone_analyzer = ToneAnalyzerV3(
+  		version='2017-09-21',
+  		username=username,
+  		password=password
+	)
+	response = tone_analyzer.tone(text, tones='emotion', content_type='text/plain')
+
+	tones_json = response["document_tone"]["tones"]
+	tones_list = []
+
+	for tone in tones_json:
+		tones_list += [tone["tone_name"]]
+
+	return " ".join(tones_list)
 
 if __name__ == "__main__":
 	authorize_init()
