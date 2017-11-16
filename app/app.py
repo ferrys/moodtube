@@ -74,14 +74,17 @@ def test_database_calls():
 
 @app.route("/twitter/auth",methods=["GET"])
 def twitter_auth():
-	return twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'])
+	return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET']))
 
 @app.route("/twitter/",methods=["GET"])
 def get_twitter_token():
     token = request.args.get("oauth_token",None)
+    print(token)
     verifier = request.args.get("oauth_verifier",None)
+    print(verifier)
     response = twitter.authorize_final(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],token,verifier)
-
+    print("Twitter Auth Info:")
+    print(response)
     # change this once we get a real user id from the native login
     user_id = 1
     token = response[0].split("=")[1]
