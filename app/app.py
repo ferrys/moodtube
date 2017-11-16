@@ -28,10 +28,7 @@ likes = Likes()
 user = User()
 dislikes = Dislikes()
 tokens = Tokens()
-<<<<<<< HEAD
 
-=======
->>>>>>> refs/remotes/origin/master
 
 @app.route("/")
 def main():
