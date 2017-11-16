@@ -25,13 +25,13 @@ def authorize_init(key, secret):
 	db.set_temp_twitter_key(1, oauth_token,oauth_secret)
 	print(db.get_temp_twitter_key(oauth_token))
 
-	url = "https://api.twitter.com/oauth/authenticate"
+	url = "https://api.twitter.com/oauth/authenticate?force_login=true"
 	token = oauth.Token(key=oauth_token, secret=oauth_secret)
 	client = oauth.Client(consumer, token)
 	resp, content = client.request(url, "GET")
-	#print(resp)
+	print(resp['content-location'])
 
-	return content.decode("utf-8")
+	return resp['content-location']
 
 #step 3 of authorization
 def authorize_final(key, secret, token, verifier):
@@ -98,6 +98,8 @@ def generate_url(screen_name,count,max_id):
 
 
 def get_tone(username, password, text):
+	if text == "":
+		return "No tweets"
 	url = "https://gateway.watsonplatform.net/authorization/api/v1/token"
 	tone_analyzer = ToneAnalyzerV3(
   		version='2017-09-21',
