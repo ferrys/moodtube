@@ -52,7 +52,8 @@ def get_tweets(key,secret,user_id,number):
 	if(number >3200):
 		number = 3200
 	db = user.User()
-	screen_name = db.get_twitter_info(user_id)[0]
+	screen_name = db.get_twitter_info(user_id)
+	print(screen_name)
 	url = generate_url(screen_name,number,None)
 	consumer = oauth.Consumer(key=key, secret=secret)
 	db = Tokens()
@@ -104,7 +105,7 @@ def get_tone(username, password, text):
   		password=password
 	)
 	response = tone_analyzer.tone(text, tones='emotion', content_type='text/plain')
-
+	print(response)
 	tones_json = response["document_tone"]["tones"]
 	tones_list = []
 
