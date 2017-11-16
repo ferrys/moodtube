@@ -95,6 +95,7 @@ def get_twitter_token():
     print("Twitter Auth Info:")
     print(response)
     tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],1,20)
+    print(tweets)
     tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
     return call_giphy_api(search=tones)
 
