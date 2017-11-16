@@ -93,6 +93,9 @@
           <div class="masthead clearfix">
             <div class="inner">
               <h3 class="masthead-brand"><a href="/">moodTUBE</a></h3>
+              {% if tones %}
+                <p class="lead">{{tones}}</p>
+              {% endif %}
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
@@ -148,7 +151,7 @@
               <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
             </p>
             <p class="lead">
-              <a href="/twitter/auth" class="btn btn-lg btn-default">Sign in to Twitter</a>
+              <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
             </p>
           </div>
       </form>

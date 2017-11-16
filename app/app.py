@@ -35,8 +35,11 @@ def main():
     return render_template('index.html')
 
 @app.route("/giphy", methods=["POST"])
-def call_giphy_api():
-    search_value = request.form.get('keyword')
+def call_giphy_api(search=None):
+    if search == None:
+        search_value = request.form.get('keyword')
+    else:
+        search_value = search
     # pass parsed api contents in `result` to html
     api_key = app.config['GFY_KEY']
     data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
@@ -50,7 +53,7 @@ def call_giphy_api():
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
-    return render_template('index.html', result=urls)
+    return render_template('index.html', result=urls,tones=search_value)
 
 # examples of how to call the database
 def test_database_calls():
@@ -91,8 +94,9 @@ def get_twitter_token():
     expires = response[4]
     print("Twitter Auth Info:")
     print(response)
-
-    return render_template('index.html')
+    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],1,20)
+    tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
+    return call_giphy_api(search=tones)
 
 if __name__ == "__main__":
     app.run()
