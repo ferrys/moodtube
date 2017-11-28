@@ -2,5 +2,6 @@
 config.cfg
 __pycache__
 creds.txt
+*.pyc
 config.cfg.txt
 config.cfd.txt

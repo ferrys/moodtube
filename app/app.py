@@ -8,6 +8,7 @@ from dislikes import Dislikes
 from tokens import Tokens
 from random import randint
 import twitter
+import loginmanagement
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -29,12 +30,81 @@ user = User()
 dislikes = Dislikes()
 tokens = Tokens()
 
+conn = mysql.connect()
+cursor = conn.cursor()
+cursor.execute("SELECT email FROM Users")
+users = cursor.fetchall()
 
 @app.route("/")
 def main():
-    test_database_calls()
+    #test_database_calls()
     return render_template('index.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if flask.request.method == 'GET':
+        return '''
+               <form action='login' method='POST'>
+                <input type='text' name='email' id='email' placeholder='email'></input>
+                <input type='password' name='password' id='password' placeholder='password'></input>
+                <input type='submit' name='submit'></input>
+               </form></br>
+           <a href='/'>Home</a>
+               '''
+    #The request method is POST (page is recieving data)
+    email = flask.request.form['email']
+    cursor = conn.cursor()
+    #check if email is registered
+    if cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email)):
+        data = cursor.fetchall()
+        pwd = str(data[0][0] )
+        if flask.request.form['password'] == pwd:
+            user = User()
+            user.id = email
+            flask_login.login_user(user) #okay login in user
+            return flask.redirect(flask.url_for('protected')) #protected is a function defined in this file
+ 
+    #information did not match
+    return "<a href='/login'>Try again</a>\
+            </br><a href='/register'>or make an account</a>"
+ 
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return render_template('index.html', message='Logged out', users=findTopUsers())
+ 
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return render_template('unauth.html')
+ 
+#we can specify specific methods (GET/POST) in function header
+@app.route("/register", methods=['GET'])
+def register():
+    return render_template('register.html', supress='True')  
+ 
+@app.route("/register", methods=['POST'])
+def register_user():
+    try:
+        username=request.form.get('name')
+        email=request.form.get('email')
+        password=request.form.get('password')
+    except:
+        print "couldn't find all tokens"
+        return flask.redirect(flask.url_for('register'))
+    cursor = conn.cursor()
+    unique =  isEmailUnique(email)
+    if unique:
+        cursor.execute("INSERT INTO Users (username, email, password) VALUES ('{0}', '{1}', '{2}')".format(username, email, password))
+        conn.commit()
+        #log user in
+        user = User()
+        user.id = email
+        flask_login.login_user(user)
+        return render_template('profile.html', name=username, message='Account Created!')
+    else:
+        print "couldn't find all tokens"
+        return render_template("register.html", suppress=False)
+    
 @app.route("/giphy", methods=["POST"])
 def call_giphy_api(search=None):
     if search == None:
