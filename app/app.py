@@ -106,22 +106,33 @@ def register_user():
         return render_template("register.html", suppress=False)
     
 @app.route("/giphy", methods=["POST"])
-def call_giphy_api():
-    search_value = request.form.get('keyword')
+def call_giphy_api(search=None):
+    if search == None:
+        search_value = request.form.get('keyword')
+    else:
+        search_value = search
     # pass parsed api contents in `result` to html
     api_key = app.config['GFY_KEY']
     data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
     print(data)
     urls = []
-    
+
     # if there are no gifs, display 404 gifs
     if data["data"] == []:
         data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+ "404" + "&api_key="+ api_key +"&limit=5").read())
-    
+
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
-    return render_template('index.html', result=urls)
+    return render_template('index.html', result=urls,tones=search_value)
+
+@app.route("/page/login", methods=["GET"])
+def show_login_page():
+    return render_template("login.html")
+
+@app.route("/page/register",methods=["GET"])
+def show_register_page():
+    return render_template("register.html")
 
 # examples of how to call the database
 def test_database_calls():
@@ -142,14 +153,17 @@ def test_database_calls():
 
 @app.route("/twitter/auth",methods=["GET"])
 def twitter_auth():
-	return twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'])
+	return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET']))
 
 @app.route("/twitter/",methods=["GET"])
 def get_twitter_token():
     token = request.args.get("oauth_token",None)
+    print(token)
     verifier = request.args.get("oauth_verifier",None)
+    print(verifier)
     response = twitter.authorize_final(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],token,verifier)
-    
+    print("Twitter Auth Info:")
+    print(response)
     # change this once we get a real user id from the native login
     user_id = 1
     token = response[0].split("=")[1]
@@ -162,8 +176,10 @@ def get_twitter_token():
     expires = response[4]
     print("Twitter Auth Info:")
     print(response)
-
-    return render_template('index.html')
+    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],1,20)
+    print(tweets)
+    tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
+    return call_giphy_api(search=tones)
 
 if __name__ == "__main__":
     app.run()

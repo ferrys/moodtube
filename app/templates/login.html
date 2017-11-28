@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +8,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>moodTUBE</title>
+    <title>login</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,8 +21,7 @@
   </head>
 
   <body>
-
-    <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -55,89 +53,7 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-
-
-
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              {% if tones %}
-                <p class="lead">{{tones}}</p>
-              {% endif %}
-              {% if result %}
-                  {% for url in result %}
-                      <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                  {% endfor %}
-
-              {% endif %}
-              <nav>
-
-                <svg width="960" height="500"></svg>
-                <script src="https://d3js.org/d3.v4.min.js"></script>
-                <script>
-
-                var svg = d3.select("svg"),
-                    width = +svg.attr("width"),
-                    height = +svg.attr("height"),
-                    angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
-
-                var path = svg.append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                    .attr("fill", "none")
-                    .attr("stroke-width", 10)
-                    .attr("stroke-linejoin", "round")
-                  .selectAll("path")
-                  .data(["cyan", "magenta", "yellow"])
-                  .enter().append("path")
-                    .attr("stroke", function(d) { return d; })
-                    .style("mix-blend-mode", "darken")
-                    .datum(function(d, i) {
-                      return d3.radialLine()
-                          .curve(d3.curveLinearClosed)
-                          .angle(function(a) { return a; })
-                          .radius(function(a) {
-                            var t = d3.now() / 1000;
-                            return 200 + Math.cos(a * 8 - i * 2 * Math.PI / 3 + t) * Math.pow((1 + Math.cos(a - t)) / 2, 3) * 32;
-                          });
-                    });
-
-                d3.timer(function() {
-                  path.attr("d", function(d) {
-                    return d(angles);
-                  });
-                });
-
-                </script>
-              </nav>
-            </div>
-          </div>
-          <section id="Emotions">
-          <div class="inner cover">
-            <h1 class="cover-heading">moodTUBE</h1>
-            <p class="lead">Using our twitter sentiment analysis, we can suggest gif's based on your emotional state! you can like and share via twitter, facebook or pinterest!</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
-            </p>
-            <p class="lead">
-              <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
-            </p>
-      </form>
-          </section>
-
-          <div class="result">
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
-                  <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
-
-                </ul>
-          </div>
-    <!-- Login Section -->
-    <section class="success" id="about">
+      <section class="success" id="about">
       <div class="container">
         <h2 class="text-center">Login</h2>
         <hr class="star-light">
@@ -167,7 +83,6 @@
 
           </div>
         </div>
-      </div>
-    </section>
-  </body>
-</html>
+        </div>
+        </section>
+    </body>
