@@ -80,11 +80,12 @@ def unauthorized_handler():
 #we can specify specific methods (GET/POST) in function header
 @app.route("/register", methods=['GET'])
 def register():
-    return render_template('register.html', supress='True')  
+    return render_template('register.html', supress='True')
  
 @app.route("/register", methods=['POST'])
 def register_user():
     try:
+        print("HEY")
         username=request.form.get('name')
         email=request.form.get('email')
         password=request.form.get('password')
@@ -106,7 +107,9 @@ def register_user():
         return render_template("register.html", suppress=False)
     
 @app.route("/giphy", methods=["POST"])
+#@flask_login.login_required
 def call_giphy_api(search=None):
+    message = ""
     if search == None:
         search_value = request.form.get('keyword')
     else:
@@ -120,11 +123,11 @@ def call_giphy_api(search=None):
     # if there are no gifs, display 404 gifs
     if data["data"] == []:
         data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+ "404" + "&api_key="+ api_key +"&limit=5").read())
-
+        message="Sorry, we couldn't find any GIFs!"
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
-    return render_template('index.html', result=urls,tones=search_value)
+    return render_template('index.html', result=urls,tones=search_value,message=message)
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
@@ -133,6 +136,26 @@ def show_login_page():
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
     return render_template("register.html")
+
+@app.route('/page/likes', methods=['POST'])
+#@flask_login.login_required
+def like_gif():
+    uid = getUserIdFromEmail(flask_login.current_user.id)
+    if request.method == 'POST':
+        embedded_url = request.form.get('likes')
+        likes.set_likes(uid, embedded_url)
+    return render_template('index.html')
+    
+@app.route('/page/dislikes', methods=['POST'])
+#@flask_login.login_required
+def dislike_gif():
+    uid = getUserIdFromEmail(flask_login.current_user.id)
+    embedded_url = request.form.get('dislikes')
+    if request.method == 'POST':
+        embedded_url = request.form.get('likes')
+        dislikes.set_dislikes(uid, embedded_url)
+        
+    return render_template('index.html')
 
 # examples of how to call the database
 def test_database_calls():
@@ -152,10 +175,12 @@ def test_database_calls():
     print(dislikes.get_dislikes(user_id))
 
 @app.route("/twitter/auth",methods=["GET"])
+@flask_login.login_required
 def twitter_auth():
 	return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET']))
 
 @app.route("/twitter/",methods=["GET"])
+@flask_login.login_required
 def get_twitter_token():
     token = request.args.get("oauth_token",None)
     print(token)
