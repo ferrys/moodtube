@@ -89,7 +89,7 @@ def register_user():
         email=request.form.get('email')
         password=request.form.get('password')
     except:
-        print "couldn't find all tokens"
+        print("couldn't find all tokens")
         return flask.redirect(flask.url_for('register'))
     cursor = conn.cursor()
     unique =  isEmailUnique(email)
@@ -102,7 +102,7 @@ def register_user():
         flask_login.login_user(user)
         return render_template('profile.html', name=username, message='Account Created!')
     else:
-        print "couldn't find all tokens"
+        print("couldn't find all tokens")
         return render_template("register.html", suppress=False)
     
 @app.route("/giphy", methods=["POST"])
