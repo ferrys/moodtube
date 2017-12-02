@@ -138,9 +138,11 @@ def show_login_page():
 def show_register_page():
     return render_template("register.html")
 
-@app.route("/page/login", methods=["GET"])
+@app.route("/page/likes", methods=["GET"])
 def show_likes_page():
-    return render_template("likes.html")
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    urls = [likes[0] for likes in likes.get_likes(uid)]
+    return render_template("likes.html", result=urls)
 
 @login_manager.user_loader
 def user_loader(email):

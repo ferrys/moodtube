@@ -21,55 +21,15 @@
   </head>
 
   <body>
-
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href=/>moodTUBE</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/page/login">Login<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/page/register">Register</a></li>
-            <li><a href="#">moodCHOOSE</a></li>
-            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/page/likes">Likes<span class="sr-only">(current)</span></a>
-            </li>
-          </ul>
-          <form class="navbar-form navbar-left" method="post" action="/giphy">
-
-
-              <input type="search" value="Search" name="keyword" />
-              <button type="submit" class="btn btn-default">Submit</button>
-          </form>
-            </li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-
+      <div class="output">
+      {% include 'header.html' %}
+     </div>
 
     <div class="site-wrapper">
-
       <div class="site-wrapper-inner">
-
         <div class="cover-container">
-
           <div class="masthead clearfix">
             <div class="inner">
-              {% if tones %}
-                <p class="lead">{{tones}}</p>
-              {% endif %}
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
@@ -81,44 +41,6 @@
                   {% endfor %}
 
               {% endif %}
-              <nav>
 
-                <svg width="960" height="500"></svg>
-                <script src="https://d3js.org/d3.v4.min.js"></script>
-                <script>
-
-                var svg = d3.select("svg"),
-                    width = +svg.attr("width"),
-                    height = +svg.attr("height"),
-                    angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
-
-                var path = svg.append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                    .attr("fill", "none")
-                    .attr("stroke-width", 10)
-                    .attr("stroke-linejoin", "round")
-                  .selectAll("path")
-                  .data(["cyan", "magenta", "yellow"])
-                  .enter().append("path")
-                    .attr("stroke", function(d) { return d; })
-                    .style("mix-blend-mode", "darken")
-                    .datum(function(d, i) {
-                      return d3.radialLine()
-                          .curve(d3.curveLinearClosed)
-                          .angle(function(a) { return a; })
-                          .radius(function(a) {
-                            var t = d3.now() / 1000;
-                            return 200 + Math.cos(a * 8 - i * 2 * Math.PI / 3 + t) * Math.pow((1 + Math.cos(a - t)) / 2, 3) * 32;
-                          });
-                    });
-
-                d3.timer(function() {
-                  path.attr("d", function(d) {
-                    return d(angles);
-                  });
-                });
-
-                </script>
-              </nav>
             </div>
           </div>
