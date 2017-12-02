@@ -36,7 +36,7 @@ users = cursor.fetchall()
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -44,7 +44,6 @@ def login():
  
 @app.route('/logout')
 def logout():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return loginmanagement.logout()
  
 @login_manager.unauthorized_handler
@@ -81,30 +80,29 @@ def call_giphy_api(search=None):
     # pass in list of embedded urls for html to display
     for element in data["data"]:
         urls += [element["embed_url"]]
-    return render_template('index.html', result=urls,tones=search_value,message=message)
+    return render_template('index.html', result=urls,tones=search_value,message=message,logged_in=flask_login.current_user.is_authenticated)
 
 ###### SHOW PAGES ########
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
-    return render_template("login.html")
+    return render_template("login.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
-    return render_template("register.html")
+    return render_template("register.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/likes", methods=["GET"])
 @flask_login.login_required
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
-    return render_template("likes.html", result=urls)
+    return render_template("likes.html", result=urls,logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])
 @flask_login.login_required
 def show_moodchoose_page():
-    return render_template("moodchoose.html")
+    return render_template("moodchoose.html",logged_in=flask_login.current_user.is_authenticated)
 
 ###### END SHOW PAGES########
 
@@ -123,7 +121,7 @@ def like_gif():
     if request.method == 'POST':
         embedded_url = request.form.get('likes')
         likes.set_likes(uid, embedded_url)
-    return render_template('index.html')
+    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
 @app.route('/page/dislikes', methods=['POST'])
 @flask_login.login_required
@@ -134,7 +132,7 @@ def dislike_gif():
         embedded_url = request.form.get('dislikes')
         dislikes.set_dislikes(uid, embedded_url)
         
-    return render_template('index.html')
+    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
 
 @app.route("/twitter/auth",methods=["GET"])
