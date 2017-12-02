@@ -62,7 +62,6 @@ def register_user():
     
 @flask_login.login_required
 @app.route("/giphy", methods=["POST"])
-#@flask_login.login_required
 def call_giphy_api(search=None):
     message = ""
     if search == None:
@@ -84,6 +83,8 @@ def call_giphy_api(search=None):
         urls += [element["embed_url"]]
     return render_template('index.html', result=urls,tones=search_value,message=message)
 
+###### SHOW PAGES ########
+
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
     return render_template("login.html")
@@ -93,10 +94,18 @@ def show_register_page():
     return render_template("register.html")
 
 @app.route("/page/likes", methods=["GET"])
+@flask_login.login_required
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [likes[0] for likes in likes.get_likes(uid)]
     return render_template("likes.html", result=urls)
+
+@app.route("/moodchoose", methods=["GET"])
+@flask_login.login_required
+def show_moodchoose_page():
+    return render_template("moodchoose.html")
+
+###### END SHOW PAGES########
 
 @login_manager.user_loader
 def user_loader(email):
@@ -107,7 +116,7 @@ def request_loader(request):
   return loginmanagement.request_loader(request)
 
 @app.route('/page/likes', methods=['POST'])
-#@flask_login.login_required
+@flask_login.login_required
 def like_gif():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     if request.method == 'POST':
@@ -116,7 +125,7 @@ def like_gif():
     return render_template('index.html')
 
 @app.route('/page/dislikes', methods=['POST'])
-#@flask_login.login_required
+@flask_login.login_required
 def dislike_gif():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     embedded_url = request.form.get('dislikes')
