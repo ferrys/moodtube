@@ -51,10 +51,12 @@
                        <div class="lead">
                            <form method="post" action="/page/likes">
                     			<input type="text" name="likes" value="{{ url[0] }}" hidden="true">
+                                <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
                            </form>
                           <form method="post" action="/page/dislikes">
                     			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
+                                <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
                            </form>
                           <a href="/page/likes" class="btn btn-lg btn-default">share ME!</a>
