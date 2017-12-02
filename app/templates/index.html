@@ -42,7 +42,7 @@
             <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/page/login">Login<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/page/register">Register</a></li>
-            <li><a href="#">moodCHOSE</a></li>
+            <li><a href="#">moodCHOOSE</a></li>
           </ul>
           <form class="navbar-form navbar-left" method="post" action="/giphy">
 
@@ -89,96 +89,24 @@
                   {% endfor %}
 
               {% endif %}
-              <nav>
-
-                <svg width="960" height="500"></svg>
-                <script src="https://d3js.org/d3.v4.min.js"></script>
-                <script>
-
-                var svg = d3.select("svg"),
-                    width = +svg.attr("width"),
-                    height = +svg.attr("height"),
-                    angles = d3.range(0, 2 * Math.PI, Math.PI / 200);
-
-                var path = svg.append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                    .attr("fill", "none")
-                    .attr("stroke-width", 10)
-                    .attr("stroke-linejoin", "round")
-                  .selectAll("path")
-                  .data(["cyan", "magenta", "yellow"])
-                  .enter().append("path")
-                    .attr("stroke", function(d) { return d; })
-                    .style("mix-blend-mode", "darken")
-                    .datum(function(d, i) {
-                      return d3.radialLine()
-                          .curve(d3.curveLinearClosed)
-                          .angle(function(a) { return a; })
-                          .radius(function(a) {
-                            var t = d3.now() / 1000;
-                            return 200 + Math.cos(a * 8 - i * 2 * Math.PI / 3 + t) * Math.pow((1 + Math.cos(a - t)) / 2, 3) * 32;
-                          });
-                    });
-
-                d3.timer(function() {
-                  path.attr("d", function(d) {
-                    return d(angles);
-                  });
-                });
-
-                </script>
-              </nav>
             </div>
           </div>
           <section id="Emotions">
           <div class="inner cover">
             <h1 class="cover-heading">moodTUBE</h1>
-            <p class="lead">Using our twitter sentiment analysis, we can suggest gif's based on your emotional state! you can like and share via twitter, facebook or pinterest!</p>
+            <p class="lead">Using our Twitter sentiment analysis, we can suggest GIF's based on your emotional state! You can like, dislike or share the GIF's via Twitter.</p>
             <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">No twitter account? no problem!</a>
-            </p>
-            <p class="lead">
-              <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
+                <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
+              <a href="https://twitter.com/signup?lang=en" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
             </p>
       </form>
           </section>
 
           <div class="result">
                 <ul class="nav masthead-nav">
-                  <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy Api</a></li>
+                  <li class="active"><a href="https://github.com/giphy/GiphyAPI">Giphy API</a></li>
                   <li class="active"><a href="https://github.com/ferrys/moodtube">Github Repo</a></li>
-
                 </ul>
-          </div>
-    <!-- Login Section -->
-    <section class="success" id="about">
-      <div class="container">
-        <h2 class="text-center">Login</h2>
-        <hr class="star-light">
-        <div class="row">
-          <div class="col-lg-4 mr-auto">
-            <p>Login to your moodTUBE account</p>
-            <div class="control-group">
-                <div class="form-group floating-label-form-group controls">
-                  <label>Email Address</label>
-                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
-                  <p class="help-block text-danger"></p>
-                </div>
-              </div>
-            <div class="control-group">
-                <div class="form-group floating-label-form-group controls">
-                  <label>Password</label>
-                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your password.">
-                  <p class="help-block text-danger"></p>
-                </div>
-              </div>
-              <a href="#" class="btn btn-lg btn-outline">
-              <i class="fa fa-download"></i>
-              <button type="submit" class="btn btn-success btn-lg" id="Login">Login</button>
-            </a>
-          </div>
-          <div class="col-lg-8 mx-auto text-center">
-
           </div>
         </div>
       </div>
