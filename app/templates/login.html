@@ -60,24 +60,26 @@
         <div class="row">
           <div class="col-lg-4 mr-auto">
             <p>Login to your moodTUBE account</p>
+            <form name="loginform" id="loginform" action="/login" method="post" novalidate>
             <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label>Email Address</label>
-                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
+                  <input class="form-control" id="email" name='email' type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
             <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label>Password</label>
-                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your password.">
+                  <input class="form-control" id="password" name="password" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your password.">
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
               <a href="#" class="btn btn-lg btn-outline">
               <i class="fa fa-download"></i>
-              <button type="submit" class="btn btn-success btn-lg" id="Login">Login</button>
+              <button type="submit" class="btn btn-success btn-lg"id="Login">Login</button>
             </a>
+          </form>
           </div>
           <div class="col-lg-8 mx-auto text-center">
 

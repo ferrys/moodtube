@@ -12,11 +12,11 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="cover.css" rel="stylesheet">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
+    <script src="http://code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
 
@@ -59,38 +59,30 @@
         <hr class="star-primary">
         <div class="row">
           <div class="col-lg-8 mx-auto">
-            <form name="sentMessage" id="contactForm" novalidate>
+            <form name="sentMessage" id="contactForm" action="/register" method="post" novalidate>
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label>Name</label>
-                  <input class="form-control" id="name" type="text" placeholder="Name" required data-validation-required-message="Please enter your name.">
+                  <input class="form-control" id="name" name="name" type="text" placeholder="Name" required data-validation-required-message="Please enter your name.">
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label>Email Address</label>
-                  <input class="form-control" id="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
+                  <input class="form-control" id="email" name="email" type="email" placeholder="Email Address" required data-validation-required-message="Please enter your email address.">
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls">
                   <label>Password</label>
-                  <input class="form-control" id="phone" type="tel" placeholder="Password" required data-validation-required-message="Please enter your password.">
-                  <p class="help-block text-danger"></p>
-                </div>
-              </div>
-              <div class="control-group">
-                <div class="form-group floating-label-form-group controls">
-                  <label>twitter account</label>
-                  <textarea class="form-control" id="twitter accounts" rows="5" placeholder="Enter all twitter names" required data-validation-required-message="Please enter a twitter account."></textarea>
+                  <input class="form-control" id="password" name="password" type="tel" placeholder="Password" required data-validation-required-message="Please enter your password.">
                   <p class="help-block text-danger"></p>
                 </div>
               </div>
               <br>
               <div id="success"></div>
-              <div class="form-group">
                 <button type="submit" class="btn btn-success btn-lg" id="sendMessageButton">Register</button>
               </div>
             </form>
