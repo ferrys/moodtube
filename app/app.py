@@ -26,7 +26,7 @@ login_manager.init_app(app)
 
 #user info
 likes = Likes()
-user = User()
+user = loginmanagement.User()
 dislikes = Dislikes()
 tokens = Tokens()
 
@@ -45,6 +45,7 @@ def login():
  
 @app.route('/logout')
 def logout():
+    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return loginmanagement.logout()
  
 @login_manager.unauthorized_handler
@@ -87,6 +88,7 @@ def call_giphy_api(search=None):
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
+    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return render_template("login.html")
 
 @app.route("/page/register",methods=["GET"])
@@ -97,7 +99,7 @@ def show_register_page():
 @flask_login.login_required
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
-    urls = [likes[0] for likes in likes.get_likes(uid)]
+    urls = [x[0] for x in likes.get_likes(uid)]
     return render_template("likes.html", result=urls)
 
 @app.route("/moodchoose", methods=["GET"])
