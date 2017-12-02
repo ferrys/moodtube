@@ -20,3 +20,13 @@ class Likes(object):
         cursor = self.conn.cursor()
         cursor.execute("SELECT gif_url FROM Likes WHERE user_id = '{0}'".format(user_id))
         return cursor.fetchall()
+    
+    def find_like(self, user_id, gif_url):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT gif_url FROM Likes WHERE user_id = '{0}' AND gif_url = '{1}'".format(user_id, gif_url))
+        return cursor.fetchall()
+    
+    def remove_like(self, user_id, gif_url):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM Likes WHERE user_id = '{0}' AND gif_url = '{1}'".format(user_id, gif_url))
+        self.conn.commit()

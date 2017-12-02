@@ -20,3 +20,13 @@ class Dislikes(object):
         cursor = self.conn.cursor()
         cursor.execute("SELECT gif_url FROM Dislikes WHERE user_id = '{0}'".format(user_id))
         return cursor.fetchall()
+    
+    def find_dislike(self, user_id, gif_url):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT gif_url FROM Dislikes WHERE user_id = '{0}' AND gif_url = '{1}'".format(user_id, gif_url))
+        return cursor.fetchall()
+    
+    def remove_dislike(self, user_id, gif_url):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM Dislikes WHERE user_id = '{0}' AND gif_url = '{1}'".format(user_id, gif_url))
+        self.conn.commit()
