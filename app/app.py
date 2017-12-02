@@ -3,7 +3,6 @@ from flaskext.mysql import MySQL
 import flask_login
 import json
 from likes import Likes
-from user import User
 from dislikes import Dislikes
 from tokens import Tokens
 from random import randint
@@ -26,7 +25,7 @@ login_manager.init_app(app)
 
 #user info
 likes = Likes()
-user = User()
+user = loginmanagement.User()
 dislikes = Dislikes()
 tokens = Tokens()
 
@@ -43,16 +42,24 @@ def main():
 
 
 ####### LOGIN #######
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return loginmanagement.login()
+
+@app.route('/logout')
+def logout():
+    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
+    return loginmanagement.logout()
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return loginmanagement.unauthorized_handler()
- 
+
 #we can specify specific methods (GET/POST) in function header
 @app.route("/register", methods=['GET'])
 def register():
     return registration.register()
- 
+
 @app.route("/register", methods=['POST'])
 def register_user():
     return loginmanagement.register_user()
@@ -106,15 +113,8 @@ def call_giphy_api(search=None):
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
+    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return render_template("login.html")
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return loginmanagement.login()
- 
-@app.route('/logout')
-def logout():
-    return loginmanagement.logout()
 
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
@@ -140,8 +140,6 @@ def show_moodchoose_page():
     return render_template("moodchoose.html")
 
 ###### END SHOW PAGES########
-
-
 
 
 #### LIKES / DISLIKES ####
@@ -194,11 +192,13 @@ def dislike_gif(embedded_url):
 
 
 
+
 ##### TWITTER ######
 @app.route("/twitter/auth",methods=["GET"])
 @flask_login.login_required
 def twitter_auth():
-	return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET']))
+    user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id))
 
 @app.route("/twitter/",methods=["GET"])
 @flask_login.login_required
@@ -222,7 +222,7 @@ def get_twitter_token():
     expires = response[4]
     print("Twitter Auth Info:")
     print(response)
-    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],1,20)
+    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
     print(tweets)
     tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
     return call_giphy_api(search=tones)
