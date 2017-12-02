@@ -94,7 +94,7 @@ def request_loader(request):
     cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
     data = cursor.fetchall()
     pwd = str(data[0][0] )
-    user.is_authenticated = request.form['password'] == pwd
+#    user.is_authenticated = request.form['password'] == pwd
     return user 
 
 def getUserIdFromEmail(email):
@@ -137,8 +137,7 @@ def login():
  
 
     #information did not match
-    return "<a href='/login'>Try again</a>\
-            </br><a href='/register'>or make an account</a>"
+    return render_template('login.html', message="Please try again!")
 
 def logout():
     flask_login.logout_user()
@@ -172,7 +171,7 @@ def register_user():
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return render_template('index.html', name=username, message='Account Created!',logged_in=flask_login.current_user.is_authenticated)
+        return render_template('index.html', name=first_name, message='Account Created!',logged_in=flask_login.current_user.is_authenticated)
     else:
         print("couldn't find all tokens")
         return render_template("register.html", suppress=False, message="Please try again with a unique and valid email!", logged_in=flask_login.current_user.is_authenticated)

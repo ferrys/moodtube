@@ -29,6 +29,9 @@
         <hr class="star-light">
         <div class="row">
           <div class="col-lg-4 mr-auto">
+          {% if message %}
+              <h3>{{ message }}</h3>
+          {% endif %}
             <p>Login to your moodTUBE account</p>
             <form name="loginform" id="loginform" action="/login" method="post" novalidate>
             <div class="control-group">
