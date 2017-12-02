@@ -18,6 +18,12 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+        form {
+            display: inline-block;
+        }
+        
+    </style>
   </head>
             
     <body>
@@ -25,33 +31,53 @@
           {% include 'header.html' %}
          </div>
       <div class="container">
-            <a class="btn btn-primary" href="#" role="button">Joy</a>
-            <a class="btn btn-primary" href="#" role="button">Creative</a> 
-            <a class="btn btn-primary" href="#" role="button">Optimism</a> 
-            <a class="btn btn-primary" href="#" role="button">Freedom</a> 
-            <a class="btn btn-secondary" href="#" role="button">Luxury</a> 
-            <a class="btn btn-secondary" href="#" role="button">Power</a> 
-            <a class="btn btn-secondary" href="#" role="button">Mystery</a> 
-            <a class="btn btn-secondary" href="#" role="button">Passion</a> 
-            <a class="btn btn-success" href="#" role="button">Quiet</a> 
-            <a class="btn btn-success" href="#" role="button">Meditation</a> 
-            <a class="btn btn-success" href="#" role="button">Imagination</a> 
-            <a class="btn btn-success" href="#" role="button">Calm</a> 
-            <a class="btn btn-info" href="#" role="button">Natural</a> 
-            <a class="btn btn-info" href="#" role="button">Energized</a> 
-            <a class="btn btn-info" href="#" role="button">Euphoric</a> 
-            <a class="btn btn-info" href="#" role="button">Productive</a> 
-            <a class="btn btn-warning" href="#" role="button">Secure</a> 
-            <a class="btn btn-warning" href="#" role="button">Determined</a> 
-            <a class="btn btn-warning" href="#" role="button">Strong</a> 
-            <a class="btn btn-warning" href="#" role="button">Triumphant</a> 
-            <a class="btn btn-danger" href="#" role="button">Doubt</a> 
-            <a class="btn btn-danger" href="#" role="button">Despair</a> 
-            <a class="btn btn-danger" href="#" role="button">Shame</a> 
-            <a class="btn btn-danger" href="#" role="button">Sadness</a> 
-            <a class="btn btn-primary" href="#" role="button">Link</a> 
-            <a class="btn btn-primary" href="#" role="button">Link</a> 
-         
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Happy" hidden="true">
+            <input type="submit" class="btn btn-warning" value="Happy :)">
+        </form>
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Sad" hidden="true">
+            <input type="submit" class="btn btn-primary" value="Sad :(">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Angry" hidden="true">
+            <input type="submit" class="btn btn-danger" value="Angry >:(">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Jealous" hidden="true">
+            <input type="submit" class="btn btn-success" value="Jealous :/">
+        </form>
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Tired" hidden="true">
+            <input type="submit" class="btn btn-primary" value="Tired -__-">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Excited" hidden="true">
+            <input type="submit" class="btn btn-info" value="Excited :D">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Disgusted" hidden="true">
+            <input type="submit" class="btn btn-success" value="Disgusted D:<">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Flirty" hidden="true">
+            <input type="submit" class="btn btn-info" value="Flirty ;)">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Surprised" hidden="true">
+            <input type="submit" class="btn btn-warning" value="Surprised :O">
+        </form>
+
+        <form method="post" action="/giphy">
+            <input type="text" name="keyword" value="Loving" hidden="true">
+            <input type="submit" class="btn btn-danger" value="Loving <3">
+        </form>
       </div>
     </body>
 </html>
