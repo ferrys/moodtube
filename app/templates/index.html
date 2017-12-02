@@ -73,15 +73,17 @@
             <h1 class="cover-heading">moodTUBE</h1>
               <p class="lead">Using sentiment analysis on your Twitter feed, we can suggest GIFs based on your emotional state!</p>
 
-            {% if not logged_in %}
-              <h2 class="lead"> <a href='/page/login'>Login</a> to find out how you're feeling! </h2>
-              <h2 class="lead"> or <a href='/page/register'>Make an account here.</a></h2>
-            {% endif %}
-
+            {% if logged_in %}
               <p class="lead">
                   <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
                 <a href="/moodchoose" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
               </p>
+
+            {% else %}
+              <h2 class="lead"> <a href='/page/login'>Login</a> to find out how you're feeling! </h2>
+              <h2 class="lead"> or <a href='/page/register'>Make an account here.</a></h2>
+
+            {% endif %}
       </form>
           </section>
           <div class="result">
