@@ -33,4 +33,6 @@ TWITTER_KEY='your-api-key'
 TWITTER_SECRET='your-api-key-secret'
 IBM_USERNAME='username'
 IBM_PASSWORD='password'
+SESSION_TYPE='type'                                                                            
+SECRET_KEY='random-key'
 ```

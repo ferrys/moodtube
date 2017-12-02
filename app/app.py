@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, escape
 from flaskext.mysql import MySQL
 import flask_login
 import json
@@ -59,7 +59,7 @@ def login():
         data = cursor.fetchall()
         pwd = str(data[0][0] )
         if flask.request.form['password'] == pwd:
-            user = User()
+            user = loginmanagement.User()
             user.id = email
             flask_login.login_user(user) #okay login in user
             return flask.redirect(flask.url_for('protected')) #protected is a function defined in this file
@@ -85,7 +85,6 @@ def register():
 @app.route("/register", methods=['POST'])
 def register_user():
     try:
-        print("HEY")
         username=request.form.get('name')
         email=request.form.get('email')
         password=request.form.get('password')
@@ -93,15 +92,15 @@ def register_user():
         print("couldn't find all tokens")
         return flask.redirect(flask.url_for('register'))
     cursor = conn.cursor()
-    unique =  isEmailUnique(email)
+    unique =  loginmanagement.isEmailUnique(email)
     if unique:
         cursor.execute("INSERT INTO Users (username, email, password) VALUES ('{0}', '{1}', '{2}')".format(username, email, password))
         conn.commit()
         #log user in
-        user = User()
+        user = loginmanagement.User()
         user.id = email
         flask_login.login_user(user)
-        return render_template('profile.html', name=username, message='Account Created!')
+        return render_template('index.html', name=username, message='Account Created!')
     else:
         print("couldn't find all tokens")
         return render_template("register.html", suppress=False)
@@ -141,6 +140,13 @@ def show_register_page():
 def show_likes_page():
     return render_template("likes.html")
 
+@login_manager.user_loader
+def user_loader(email):
+  return loginmanagement.user_loader(email)
+
+@login_manager.request_loader
+def request_loader(request): 
+  return loginmanagement.request_loader(request)
 
 @app.route('/page/likes', methods=['POST'])
 #@flask_login.login_required
@@ -161,6 +167,7 @@ def dislike_gif():
         dislikes.set_dislikes(uid, embedded_url)
         
     return render_template('index.html')
+>>>>>>> 5a51cbdccdeadb71b177f0b96297bb750198afc6
 
 # examples of how to call the database
 def test_database_calls():
