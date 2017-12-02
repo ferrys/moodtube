@@ -70,12 +70,21 @@
               {% if tones %}
                 <p class="lead">{{tones}}</p>
               {% endif %}
+              {% if message %}
+                <p class="lead">{{message}}</p>
+              {% endif %}
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <p class="lead">
-                      <a href="/page/likes" class="btn btn-lg btn-default">LIKE!</a>
-                      <a href="/page/dislikes" class="btn btn-lg btn-default">disLIKE</a>
+                       <form method="post" action="/page/likes">
+                			<input type="text" name="likes" value="{{ url }}" hidden="true">
+                			<input type="submit" class="btn btn-lg btn-default" value="LIKE!">
+                       </form>
+                      <form method="post" action="/page/dislikes">
+                			<input type="text" name="dislikes" value="{{ url }}" hidden="true">
+                			<input type="submit" class="btn btn-lg btn-default" value="disLIKE!">
+                       </form>
                       <a href="/page/likes" class="btn btn-lg btn-default">shareME!</a>
                       </p>
                   {% endfor %}
