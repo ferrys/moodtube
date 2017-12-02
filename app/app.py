@@ -133,7 +133,9 @@ def show_login_page():
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
     return render_template("register.html")
-
+@app.route("/page/login", methods=["GET"])
+def show_likes_page():
+    return render_template("likes.html")
 # examples of how to call the database
 def test_database_calls():
     random_user = randint(1, 1000)
