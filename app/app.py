@@ -3,7 +3,6 @@ from flaskext.mysql import MySQL
 import flask_login
 import json
 from likes import Likes
-from user import User
 from dislikes import Dislikes
 from tokens import Tokens
 from random import randint
