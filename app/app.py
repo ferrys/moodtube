@@ -169,26 +169,7 @@ def dislike_gif():
         dislikes.set_dislikes(uid, embedded_url)
         
     return render_template('index.html')
-<<<<<<< HEAD
 
-# examples of how to call the database
-def test_database_calls():
-    random_user = randint(1, 1000)
-    user_id = user.create_user('test_user' + str(random_user), 'asidf38iawef8y')
-    username = user.get_username(user_id)
-    print(username)
-    print(user.get_user_id_from_username(username))
-
-    user.set_twitter_username(user_id, 'test_username')
-    print(user.get_twitter_info(user_id))
-
-    likes.set_likes(user_id, 'http')
-    print(likes.get_likes(user_id))
-
-    dislikes.set_dislikes(user_id, 'http')
-    print(dislikes.get_dislikes(user_id))
-=======
->>>>>>> 374f37fbe62842d180e1132a7c35ddfe8a7d0af7
 
 @app.route("/twitter/auth",methods=["GET"])
 @flask_login.login_required
