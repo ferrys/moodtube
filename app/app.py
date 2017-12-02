@@ -136,6 +136,10 @@ def show_login_page():
 def show_register_page():
     return render_template("register.html")
 
+@app.route("/page/login", methods=["GET"])
+def show_likes_page():
+    return render_template("likes.html")
+
 @login_manager.user_loader
 def user_loader(email):
   return loginmanagement.user_loader(email)
