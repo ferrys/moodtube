@@ -1,6 +1,6 @@
 import oauth2 as oauth
 from tokens import Tokens
-import user
+import loginmanagement
 import json
 from watson_developer_cloud import ToneAnalyzerV3
 
@@ -51,7 +51,7 @@ def authorize_final(key, secret, token, verifier):
 def get_tweets(key,secret,user_id,number):
 	if(number >3200):
 		number = 3200
-	db = user.User()
+	db = loginmanagement.User()
 	screen_name = db.get_twitter_info(user_id)
 	print(screen_name)
 	url = generate_url(screen_name,number,None)
