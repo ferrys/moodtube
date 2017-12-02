@@ -13,7 +13,6 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="cover.css" rel="stylesheet">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
@@ -69,9 +68,23 @@
               {% if tones %}
                 <p class="lead">{{tones}}</p>
               {% endif %}
+              {% if message %}
+                <p class="lead">{{message}}</p>
+              {% endif %}
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                       <p class="lead">
+                       <form method="post" action="/page/likes">
+                			<input type="text" name="likes" value="{{ url }}" hidden="true">
+                			<input type="submit" class="btn btn-lg btn-default" value="LIKE!">
+                       </form>
+                      <form method="post" action="/page/dislikes">
+                			<input type="text" name="dislikes" value="{{ url }}" hidden="true">
+                			<input type="submit" class="btn btn-lg btn-default" value="disLIKE!">
+                       </form>
+                      <a href="/page/likes" class="btn btn-lg btn-default">shareME!</a>
+                      </p>
                   {% endfor %}
 
               {% endif %}
