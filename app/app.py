@@ -136,7 +136,6 @@ def show_login_page():
 def show_register_page():
     return render_template("register.html")
 
-<<<<<<< HEAD
 @login_manager.user_loader
 def user_loader(email):
   return loginmanagement.user_loader(email)
@@ -144,7 +143,7 @@ def user_loader(email):
 @login_manager.request_loader
 def request_loader(request): 
   return loginmanagement.request_loader(request)
-=======
+
 @app.route('/page/likes', methods=['POST'])
 #@flask_login.login_required
 def like_gif():
@@ -164,7 +163,6 @@ def dislike_gif():
         dislikes.set_dislikes(uid, embedded_url)
         
     return render_template('index.html')
->>>>>>> 5a51cbdccdeadb71b177f0b96297bb750198afc6
 
 # examples of how to call the database
 def test_database_calls():
