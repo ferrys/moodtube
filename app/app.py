@@ -42,7 +42,7 @@ def main():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if flask.request.method == 'GET':
+    if request.method == 'GET':
         return '''
                <form action='login' method='POST'>
                 <input type='text' name='email' id='email' placeholder='email'></input>
@@ -52,18 +52,19 @@ def login():
            <a href='/'>Home</a>
                '''
     #The request method is POST (page is recieving data)
-    email = flask.request.form['email']
+    email = request.form['email']
     cursor = conn.cursor()
     #check if email is registered
     if cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email)):
         data = cursor.fetchall()
         pwd = str(data[0][0] )
-        if flask.request.form['password'] == pwd:
+        if request.form['password'] == pwd:
             user = loginmanagement.User()
             user.id = email
             flask_login.login_user(user) #okay login in user
-            return flask.redirect(flask.url_for('protected')) #protected is a function defined in this file
+            return render_template('index.html', message='Logged in!')
  
+
     #information did not match
     return "<a href='/login'>Try again</a>\
             </br><a href='/register'>or make an account</a>"
@@ -71,7 +72,7 @@ def login():
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
-    return render_template('index.html', message='Logged out', users=findTopUsers())
+    return render_template('index.html', message='Logged out')
  
 @login_manager.unauthorized_handler
 def unauthorized_handler():
@@ -105,6 +106,7 @@ def register_user():
         print("couldn't find all tokens")
         return render_template("register.html", suppress=False)
     
+@flask_login.login_required
 @app.route("/giphy", methods=["POST"])
 #@flask_login.login_required
 def call_giphy_api(search=None):
@@ -151,22 +153,23 @@ def request_loader(request):
 @app.route('/page/likes', methods=['POST'])
 #@flask_login.login_required
 def like_gif():
-    uid = getUserIdFromEmail(flask_login.current_user.id)
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     if request.method == 'POST':
         embedded_url = request.form.get('likes')
         likes.set_likes(uid, embedded_url)
     return render_template('index.html')
-    
+
 @app.route('/page/dislikes', methods=['POST'])
 #@flask_login.login_required
 def dislike_gif():
-    uid = getUserIdFromEmail(flask_login.current_user.id)
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     embedded_url = request.form.get('dislikes')
     if request.method == 'POST':
-        embedded_url = request.form.get('likes')
+        embedded_url = request.form.get('dislikes')
         dislikes.set_dislikes(uid, embedded_url)
         
     return render_template('index.html')
+<<<<<<< HEAD
 
 # examples of how to call the database
 def test_database_calls():
@@ -184,6 +187,8 @@ def test_database_calls():
 
     dislikes.set_dislikes(user_id, 'http')
     print(dislikes.get_dislikes(user_id))
+=======
+>>>>>>> 374f37fbe62842d180e1132a7c35ddfe8a7d0af7
 
 @app.route("/twitter/auth",methods=["GET"])
 @flask_login.login_required
@@ -201,7 +206,7 @@ def get_twitter_token():
     print("Twitter Auth Info:")
     print(response)
     # change this once we get a real user id from the native login
-    user_id = 1
+    user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     token = response[0].split("=")[1]
     secret = response[1].split("=")[1]
     tokens.set_oauth_twitter_tokens(user_id, token, secret)
