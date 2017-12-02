@@ -31,7 +31,11 @@
 
   <body>
     <div class="output">
-      {% include 'header.html' %}
+      {% if logged_in %}
+        {% include 'headerLoggedIn.html' %}
+      {% else %}
+        {% include 'headerDefault.html' %}
+      {% endif %}
      </div>
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
@@ -67,11 +71,17 @@
           <section id="Emotions">
           <div class="inner cover">
             <h1 class="cover-heading">moodTUBE</h1>
-            <p class="lead">Using sentiment analysis on your Twitter feed, we can suggest GIFs based on your emotional state!</p>
-            <p class="lead">
-                <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
-              <a href="/moodchoose" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
-            </p>
+              <p class="lead">Using sentiment analysis on your Twitter feed, we can suggest GIFs based on your emotional state!</p>
+
+            {% if !logged_in %}
+              <h2 class="lead"> <a href='/page/login'>Login</a> to find out how you're feeling! </h2>
+              <h2 class="lead"> or <a href='/page/register'>Make an account here.</a></h2>
+            {% endif %}
+
+              <p class="lead">
+                  <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
+                <a href="/moodchoose" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
+              </p>
       </form>
           </section>
           <div class="result">
