@@ -54,11 +54,6 @@ def logout():
 def unauthorized_handler():
     return loginmanagement.unauthorized_handler()
 
-#we can specify specific methods (GET/POST) in function header
-@app.route("/register", methods=['GET'])
-def register():
-    return registration.register()
-
 @app.route("/register", methods=['POST'])
 def register_user():
     return loginmanagement.register_user()

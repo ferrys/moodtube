@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, escape
 from flaskext.mysql import MySQL
 import flask_login
+import re
 
 #mySQL loading
 mysql = MySQL()
@@ -151,16 +152,21 @@ def register():
 
 def register_user():
     try:
-        username=request.form.get('name')
+        first_name=request.form.get('first_name')
+        last_name=request.form.get('last_name')
         email=request.form.get('email')
         password=request.form.get('password')
     except:
         print("couldn't find all tokens")
-        return flask.redirect(flask.url_for('register'))
+        return render_template("register.html", suppress=False, message="Please try again!")
+    print(first_name)
+    if first_name == "" or last_name == "" or email == "" or password == "":
+        return render_template("register.html", suppress=False, message="All fields are required.")
     cursor = conn.cursor()
     unique =  isEmailUnique(email)
-    if unique:
-        cursor.execute("INSERT INTO Users (username, email, password) VALUES ('{0}', '{1}', '{2}')".format(username, email, password))
+    valid = re.match(r"[^@]+@[^@]+\.[^@]+", email)
+    if unique and valid:
+        cursor.execute("INSERT INTO Users (first_name, last_name, email, password) VALUES ('{0}', '{1}', '{2}', '{3}')".format(first_name,last_name, email, password))
         conn.commit()
         #log user in
         user = User()
@@ -169,6 +175,7 @@ def register_user():
         return render_template('index.html', name=username, message='Account Created!',logged_in=flask_login.current_user.is_authenticated)
     else:
         print("couldn't find all tokens")
-        return render_template("register.html", suppress=False,logged_in=flask_login.current_user.is_authenticated)
+        return render_template("register.html", suppress=False, message="Please try again with a unique and valid email!", logged_in=flask_login.current_user.is_authenticated)
+
 
 
