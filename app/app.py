@@ -36,7 +36,7 @@ users = cursor.fetchall()
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
 
 
@@ -48,7 +48,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return loginmanagement.logout()
 
 @login_manager.unauthorized_handler
@@ -98,7 +97,7 @@ def call_giphy_api(search=None):
         dislike_text = "Un-dislike!" if dislikes.find_dislike(uid, element["embed_url"]) != () else "Dislike!"
         urls += [(element["embed_url"], like_text, dislike_text)]
     print(urls)
-    return render_template('index.html', result=urls,tones=search_value,message=message)
+    return render_template('index.html', result=urls,tones=search_value,message=message,logged_in=flask_login.current_user.is_authenticated)
 
 ##### END GIPHY ########
 
@@ -108,31 +107,30 @@ def call_giphy_api(search=None):
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
-    return render_template("login.html")
+    return render_template("login.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
-    return render_template("register.html")
+    return render_template("register.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/likes", methods=["GET"])
 @flask_login.login_required
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
-    return render_template("likes.html", result=urls, message="Likes!")
+    return render_template("likes.html", result=urls, message="Likes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/dislikes", methods=["GET"])
 @flask_login.login_required
 def show_dislikes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in dislikes.get_dislikes(uid)]
-    return render_template("dislikes.html", result=urls, message="Dislikes!")
+    return render_template("dislikes.html", result=urls, message="Dislikes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])
 @flask_login.login_required
 def show_moodchoose_page():
-    return render_template("moodchoose.html")
+    return render_template("moodchoose.html",logged_in=flask_login.current_user.is_authenticated)
 
 ###### END SHOW PAGES########
 
@@ -152,12 +150,12 @@ def like_unlike():
 def like_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.set_likes(uid, embedded_url)
-    return render_template('index.html', message="GIF Liked!")
+    return render_template('index.html', message="GIF Liked!", logged_in=flask_login.current_user.is_authenticated)
     
 def unlike_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.remove_like(uid, embedded_url)
-    return render_template('index.html', message="GIF Unliked!")
+    return render_template('index.html', message="GIF Unliked!", logged_in=flask_login.current_user.is_authenticated)
     
     
 @app.route('/page/dislikes', methods=['POST'])
@@ -175,12 +173,12 @@ def undislike_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     print(uid,embedded_url)
     dislikes.remove_dislike(uid, embedded_url)
-    return render_template('index.html', message="GIF Un-disliked!")
+    return render_template('index.html', message="GIF Un-disliked!", logged_in=flask_login.current_user.is_authenticated)
 
 def dislike_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     dislikes.set_dislikes(uid, embedded_url)
-    return render_template('index.html', message="GIF Disliked!")
+    return render_template('index.html', message="GIF Disliked!", logged_in=flask_login.current_user.is_authenticated)
 
 #### END / DISLIKES ####
 

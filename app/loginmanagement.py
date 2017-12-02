@@ -24,7 +24,7 @@ def getUsers():
     cursor.execute("SELECT email FROM Users")
     return cursor.fetchall()
 
-class User(flask_login.UserMixin):
+class User(flask_login.UserMixin, flask_login.AnonymousUserMixin):
     def __init__(self):
         app = Flask(__name__)
         self.mysql = MySQL()
@@ -72,7 +72,7 @@ class User(flask_login.UserMixin):
         cursor.execute("SELECT twitter_username FROM Users WHERE user_id = '{0}'".format(user_id))
         response = cursor.fetchone()
         return response[0]
-
+    
 @login_manager.user_loader
 def user_loader(email):
     users = getUsers()
@@ -133,8 +133,7 @@ def login():
             user = User()
             user.id = email
             flask_login.login_user(user) #okay login in user
-            print(user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
-            return render_template('index.html', message='Logged in!')
+            return render_template('index.html', message='Logged in!',logged_in=flask_login.current_user.is_authenticated)
  
 
     #information did not match
@@ -143,13 +142,13 @@ def login():
 
 def logout():
     flask_login.logout_user()
-    return render_template('index.html', message='Logged out')
+    return render_template('index.html', message='Logged out',logged_in=flask_login.current_user.is_authenticated)
 
 def unauthorized_handler():
-    return render_template('unauth.html')
+    return render_template('unauth.html',logged_in=flask_login.current_user.is_authenticated)
 
 def register():
-    return render_template('register.html', supress='True')
+    return render_template('register.html', supress='True',logged_in=flask_login.current_user.is_authenticated)
 
 def register_user():
     try:
@@ -173,9 +172,10 @@ def register_user():
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return render_template('index.html', name=first_name, message='Account Created!')
+        return render_template('index.html', name=username, message='Account Created!',logged_in=flask_login.current_user.is_authenticated)
     else:
         print("couldn't find all tokens")
-        return render_template("register.html", suppress=False, message="Please try again with a unique and valid email!")
+        return render_template("register.html", suppress=False, message="Please try again with a unique and valid email!", logged_in=flask_login.current_user.is_authenticated)
+
 
 
