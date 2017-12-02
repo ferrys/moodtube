@@ -167,7 +167,6 @@ def dislike_gif():
         dislikes.set_dislikes(uid, embedded_url)
         
     return render_template('index.html')
->>>>>>> 5a51cbdccdeadb71b177f0b96297bb750198afc6
 
 # examples of how to call the database
 def test_database_calls():
