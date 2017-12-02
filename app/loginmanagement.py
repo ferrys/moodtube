@@ -132,7 +132,6 @@ def login():
             user = User()
             user.id = email
             flask_login.login_user(user) #okay login in user
-            print user.is_active,user.is_authenticated,user.is_anonymous,user.get_id
             return render_template('index.html', message='Logged in!',logged_in=flask_login.current_user.is_authenticated)
  
 

@@ -18,12 +18,14 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <style>
+  
+      <style>
         form {
             display: inline-block;
         }
       </style>
-   </head>
+    
+  </head>
 
   <body>
       <div class="output">
@@ -41,11 +43,12 @@
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                       <p class="lead">
-                        <form method="post" action="/page/likes">
-                    			<input type="text" name="likes" value="{{ url }}" hidden="true">
-                    			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="Unlike!">
+                       <p class="lead"> 
+                       <form method="post" action="/page/dislikes">
+                    			<input type="text" name="dislikes" value="{{ url }}" hidden="true">
+                    			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="Un-dislike!">
                         </form>
+
                       <a href="/page/share" class="btn btn-lg btn-default">shareME!</a>
                       </p>
                   {% endfor %}

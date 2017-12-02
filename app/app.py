@@ -38,30 +38,48 @@ users = cursor.fetchall()
 def main():
     return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
+
+
+
+####### LOGIN #######
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return loginmanagement.login()
- 
+
 @app.route('/logout')
 def logout():
     return loginmanagement.logout()
- 
+
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return loginmanagement.unauthorized_handler()
- 
+
 #we can specify specific methods (GET/POST) in function header
 @app.route("/register", methods=['GET'])
 def register():
     return registration.register()
- 
+
 @app.route("/register", methods=['POST'])
 def register_user():
     return loginmanagement.register_user()
+
+@login_manager.user_loader
+def user_loader(email):
+  return loginmanagement.user_loader(email)
+
+@login_manager.request_loader
+def request_loader(request): 
+  return loginmanagement.request_loader(request)
+
+###### END LOGIN ######
     
-@flask_login.login_required
+
+
+####### GIPHY #######
 @app.route("/giphy", methods=["POST"])
+@flask_login.login_required
 def call_giphy_api(search=None):
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     message = ""
     if search == None:
         search_value = request.form.get('keyword')
@@ -79,8 +97,16 @@ def call_giphy_api(search=None):
         message="Sorry, we couldn't find any GIFs!"
     # pass in list of embedded urls for html to display
     for element in data["data"]:
-        urls += [element["embed_url"]]
+        print(likes.find_like(uid, element["embed_url"]))
+        like_text = "Unlike!" if likes.find_like(uid, element["embed_url"]) != () else "Like!"
+        dislike_text = "Un-dislike!" if dislikes.find_dislike(uid, element["embed_url"]) != () else "Dislike!"
+        urls += [(element["embed_url"], like_text, dislike_text)]
+    print(urls)
     return render_template('index.html', result=urls,tones=search_value,message=message,logged_in=flask_login.current_user.is_authenticated)
+
+##### END GIPHY ########
+
+
 
 ###### SHOW PAGES ########
 
@@ -97,7 +123,14 @@ def show_register_page():
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
-    return render_template("likes.html", result=urls,logged_in=flask_login.current_user.is_authenticated)
+    return render_template("likes.html", result=urls, message="Likes!", logged_in=flask_login.current_user.is_authenticated)
+
+@app.route("/page/dislikes", methods=["GET"])
+@flask_login.login_required
+def show_dislikes_page():
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    urls = [x[0] for x in dislikes.get_dislikes(uid)]
+    return render_template("dislikes.html", result=urls, message="Dislikes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])
 @flask_login.login_required
@@ -106,39 +139,64 @@ def show_moodchoose_page():
 
 ###### END SHOW PAGES########
 
-@login_manager.user_loader
-def user_loader(email):
-  return loginmanagement.user_loader(email)
 
-@login_manager.request_loader
-def request_loader(request): 
-  return loginmanagement.request_loader(request)
-
+#### LIKES / DISLIKES ####
 @app.route('/page/likes', methods=['POST'])
 @flask_login.login_required
-def like_gif():
-    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+def like_unlike():
     if request.method == 'POST':
         embedded_url = request.form.get('likes')
-        likes.set_likes(uid, embedded_url)
-    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
+        like_value = request.form.get('like_value')
+        if like_value == "Like!":
+            return like_gif(embedded_url)
+        else:
+            return unlike_gif(embedded_url)
 
+def like_gif(embedded_url):
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    likes.set_likes(uid, embedded_url)
+    return render_template('index.html', message="GIF Liked!", logged_in=flask_login.current_user.is_authenticated)
+    
+def unlike_gif(embedded_url):
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    likes.remove_like(uid, embedded_url)
+    return render_template('index.html', message="GIF Unliked!", logged_in=flask_login.current_user.is_authenticated)
+    
+    
 @app.route('/page/dislikes', methods=['POST'])
 @flask_login.login_required
-def dislike_gif():
-    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
-    embedded_url = request.form.get('dislikes')
+def dislike_undislike():
     if request.method == 'POST':
         embedded_url = request.form.get('dislikes')
-        dislikes.set_dislikes(uid, embedded_url)
+        like_value = request.form.get('dislike_value')
+        if like_value == "Dislike!":
+            return dislike_gif(embedded_url)
+        else:
+            return undislike_gif(embedded_url)
         
-    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
+def undislike_gif(embedded_url):
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    print(uid,embedded_url)
+    dislikes.remove_dislike(uid, embedded_url)
+    return render_template('index.html', message="GIF Un-disliked!", logged_in=flask_login.current_user.is_authenticated)
+
+def dislike_gif(embedded_url):
+    uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    dislikes.set_dislikes(uid, embedded_url)
+    return render_template('index.html', message="GIF Disliked!", logged_in=flask_login.current_user.is_authenticated)
+
+#### END / DISLIKES ####
 
 
+
+
+
+##### TWITTER ######
 @app.route("/twitter/auth",methods=["GET"])
 @flask_login.login_required
 def twitter_auth():
-	return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET']))
+    user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id))
 
 @app.route("/twitter/",methods=["GET"])
 @flask_login.login_required
@@ -162,10 +220,12 @@ def get_twitter_token():
     expires = response[4]
     print("Twitter Auth Info:")
     print(response)
-    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],1,20)
+    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
     print(tweets)
     tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
     return call_giphy_api(search=tones)
+
+##### END TWITTER ######
 
 if __name__ == "__main__":
     app.run()
