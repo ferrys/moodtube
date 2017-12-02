@@ -94,7 +94,7 @@ def request_loader(request):
     cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
     data = cursor.fetchall()
     pwd = str(data[0][0] )
-    user.is_authenticated = request.form['password'] == pwd
+#    user.is_authenticated = request.form['password'] == pwd
     return user 
 
 def getUserIdFromEmail(email):
