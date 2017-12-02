@@ -5,7 +5,7 @@ import json
 from watson_developer_cloud import ToneAnalyzerV3
 
 #steps 1 and 2 of authorization
-def authorize_init(key, secret):
+def authorize_init(key, secret, user_id):
 	# Create your consumer with the proper key/secret.
 	consumer = oauth.Consumer(key=key, secret=secret)
 
@@ -22,7 +22,7 @@ def authorize_init(key, secret):
 	oauth_secret = str(content)[1:].split("&")[1].split("=")[1]
 	print(oauth_token,oauth_secret)
 	db = Tokens()
-	db.set_temp_twitter_key(1, oauth_token,oauth_secret)
+	db.set_temp_twitter_key(user_id, oauth_token,oauth_secret)
 	print(db.get_temp_twitter_key(oauth_token))
 
 	url = "https://api.twitter.com/oauth/authenticate?force_login=true"
