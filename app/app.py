@@ -81,7 +81,7 @@ def call_giphy_api(search=None, message=''):
         search_value = search
     # pass parsed api contents in `result` to html
     api_key = app.config['GFY_KEY']
-    data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
+    data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=20").read())
     print(data)
     urls = []
 
@@ -229,6 +229,10 @@ def get_twitter_token():
     return call_giphy_api(search=tones)
 
 ##### END TWITTER ######
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html', logged_in=flask_login.current_user.is_authenticated), 500
 
 if __name__ == "__main__":
     app.run()

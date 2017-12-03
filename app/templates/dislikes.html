@@ -42,7 +42,7 @@
                 {% endif %}
               {% if result %}
                   {% for url in result %}
-                      <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                      <iframe src={{url}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <p class="lead"> 
                        <form method="post" action="/page/dislikes">
                     			<input type="text" name="dislikes" value="{{ url }}" hidden="true">

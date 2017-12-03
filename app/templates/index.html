@@ -24,7 +24,7 @@
         form {
             display: inline-block;
         }
-        .box { display:inline-block; }
+
         
     </style>
     </head>
@@ -50,22 +50,22 @@
               {% endif %}
               {% if result %}
                   {% for url in result %}
-                  <div class="box">
-                      <iframe src={{url[0]}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                       <div class="lead">
-                           <form method="post" action="/page/likes">
-                    			<input type="text" name="likes" value="{{ url[0] }}" hidden="true">
-                                <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
-                    			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
-                           </form>
-                          <form method="post" action="/page/dislikes">
-                    			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
-                                <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
-                    			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
-                           </form>
-                          <a href="/page/likes" class="btn btn-lg btn-default">share ME!</a>
-                      </div>
-                    <div>
+                          <iframe src={{url[0]}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                           <div class="lead">
+                               <form method="post" action="/page/likes">
+                        			<input type="text" name="likes" value="{{ url[0] }}" hidden="true">
+                                    <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
+                               </form>
+                              <form method="post" action="/page/dislikes">
+                        			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
+                                    <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
+                               </form>
+                               <form method="post" action="/">
+                                  <input type="submit" class="btn btn-lg btn-default" value="Share">
+                              </form>
+                          </div>
                   {% endfor %}
               {% endif %}
             </div>
