@@ -117,6 +117,7 @@ def show_register_page():
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
+    urls = reversed(urls)
     return render_template("likes.html", result=urls, message="Likes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/dislikes", methods=["GET"])
@@ -124,6 +125,7 @@ def show_likes_page():
 def show_dislikes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in dislikes.get_dislikes(uid)]
+    urls = reversed(urls)
     return render_template("dislikes.html", result=urls, message="Dislikes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])

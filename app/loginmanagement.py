@@ -53,16 +53,9 @@ class User(flask_login.UserMixin, flask_login.AnonymousUserMixin):
         cursor.execute(query)
         self.conn.commit()
 
-
-    def get_user_id_from_username(self, username):
+    def get_name(self, user_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT user_id FROM Users WHERE username = '{0}'".format(username))
-        response = cursor.fetchone()[0]
-        return response
-
-    def get_username(self, user_id):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT username FROM Users WHERE user_id = '{0}'".format(user_id))
+        cursor.execute("SELECT first_name FROM Users WHERE user_id = '{0}'".format(user_id))
         response = cursor.fetchone()[0]
         return response
 
@@ -93,7 +86,7 @@ def request_loader(request):
     cursor = mysql.connect().cursor()
     cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
     data = cursor.fetchall()
-    pwd = str(data[0][0] )
+#    pwd = str(data[0][0])
 #    user.is_authenticated = request.form['password'] == pwd
     return user 
 
@@ -117,7 +110,6 @@ def login():
         return render_template("login.html")
     #The request method is POST (page is recieving data)
     email = request.form['email']
-    print(email)
     if email == "":
         return render_template("login.html", message="Please try again!")
     cursor = conn.cursor()
@@ -126,20 +118,21 @@ def login():
         data = cursor.fetchall()
         if data == ():
             return render_template("login.html", message="Please try again!")
-        pwd = str(data[0][0] )
+        pwd = str(data[0][0])
         if request.form['password'] == pwd:
             user = User()
             user.id = email
             flask_login.login_user(user) #okay login in user
-            return render_template('index.html', message='Logged in!',logged_in=flask_login.current_user.is_authenticated)
+            return render_template('index.html', name=user.get_name(getUserIdFromEmail(flask_login.current_user.id)),logged_in=flask_login.current_user.is_authenticated)
  
-
     #information did not match
     return render_template('login.html', message="Please try again!")
 
 def logout():
+    user = User()
+    name=user.get_name(getUserIdFromEmail(flask_login.current_user.id))
     flask_login.logout_user()
-    return render_template('index.html', message='Logged out',logged_in=flask_login.current_user.is_authenticated)
+    return render_template('index.html', message='Goodbye '+name+"!",logged_in=flask_login.current_user.is_authenticated)
 
 def unauthorized_handler():
     return render_template('unauth.html',logged_in=flask_login.current_user.is_authenticated)

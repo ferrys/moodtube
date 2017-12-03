@@ -42,6 +42,9 @@
         <div class="cover-container">
           <div class="masthead clearfix">
             <div class="inner">
+            {% if name %}
+                 <h3>Welcome, {{ name }}!</h3>
+            {% endif %}
               {% if tones %}
                 <p class="lead">{{tones}}</p>
               {% endif %}
