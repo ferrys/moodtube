@@ -117,10 +117,14 @@ def login():
         return render_template("/page/login")
     #The request method is POST (page is recieving data)
     email = request.form['email']
+    if email == "":
+        return render_template("/page/login", message="Please try again!")
     cursor = conn.cursor()
     #check if email is registered
     if cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email)):
         data = cursor.fetchall()
+        if data == ():
+            return render_template("/page/login", message="Please try again!")
         pwd = str(data[0][0] )
         if request.form['password'] == pwd:
             user = User()
