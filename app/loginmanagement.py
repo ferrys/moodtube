@@ -86,8 +86,6 @@ def request_loader(request):
     cursor = mysql.connect().cursor()
     cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
     data = cursor.fetchall()
-#    pwd = str(data[0][0])
-#    user.is_authenticated = request.form['password'] == pwd
     return user 
 
 def getUserIdFromEmail(email):
@@ -116,6 +114,8 @@ def login():
     #check if email is registered
     if cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email)):
         data = cursor.fetchall()
+        print("!!!")
+        print(data)
         if data == ():
             return render_template("login.html", message="Please try again!")
         pwd = str(data[0][0])
