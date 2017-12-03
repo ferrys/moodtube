@@ -29,7 +29,7 @@
 
   <body>
       <div class="output">
-      {% include 'header.html' %}
+      {% include 'headerLoggedIn.html' %}
      </div>
 
     <div class="site-wrapper">
@@ -42,10 +42,11 @@
                 {% endif %}
               {% if result %}
                   {% for url in result %}
-                      <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                      <iframe src={{url}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <p class="lead"> 
                        <form method="post" action="/page/dislikes">
                     			<input type="text" name="dislikes" value="{{ url }}" hidden="true">
+                                <input type="text" name="tone" value="N/A" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="Un-dislike!">
                         </form>
 

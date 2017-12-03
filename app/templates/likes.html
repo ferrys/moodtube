@@ -27,7 +27,7 @@
 
   <body>
       <div class="output">
-      {% include 'header.html' %}
+      {% include 'headerLoggedIn.html' %}
      </div>
 
     <div class="site-wrapper">
@@ -40,10 +40,11 @@
                 {% endif %}
               {% if result %}
                   {% for url in result %}
-                      <iframe src={{url}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                      <iframe src={{url}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <p class="lead">
                         <form method="post" action="/page/likes">
                     			<input type="text" name="likes" value="{{ url }}" hidden="true">
+                                <input type="text" name="tone" value="N/A" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="Unlike!">
                         </form>
                       <a href="/page/share" class="btn btn-lg btn-default">shareME!</a>

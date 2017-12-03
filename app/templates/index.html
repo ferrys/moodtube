@@ -24,20 +24,26 @@
         form {
             display: inline-block;
         }
-        .box { display:inline-block; }
 
     </style>
     </head>
 
   <body>
     <div class="output">
-      {% include 'header.html' %}
+      {% if logged_in %}
+        {% include 'headerLoggedIn.html' %}
+      {% else %}
+        {% include 'headerDefault.html' %}
+      {% endif %}
      </div>
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
         <div class="cover-container">
           <div class="masthead clearfix">
             <div class="inner">
+            {% if name %}
+                 <h3>Welcome, {{ name }}!</h3>
+            {% endif %}
               {% if tones %}
                 <p class="lead">{{tones}}</p>
               {% endif %}
@@ -50,14 +56,16 @@
                   <div class="box">
                       <iframe src={{url[0]}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <div class="lead">
-                           <form method="post" action="/page/likes">
-                    			<input type="text" name="likes" value="{{ url[0] }}" hidden="true">
-                    			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
-                           </form>
-                          <form method="post" action="/page/dislikes">
-                    			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
-                    			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
-                           </form>
+                         <form method="post" action="/page/likes">
+                        <input type="text" name="likes" value="{{ url[0] }}" hidden="true">
+                              <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        <input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
+                         </form>
+                        <form method="post" action="/page/dislikes">
+                        <input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
+                              <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        <input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
+                         </form>
                            <script type="text/javascript">
                                function myFunction(x,y) {
     	                            document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
@@ -80,11 +88,19 @@
           <section id="Emotions">
           <div class="inner cover">
             <h1 class="cover-heading">moodTUBE</h1>
-            <p class="lead">Using sentiment analysis on your Twitter feed, we can suggest GIFs based on your emotional state!</p>
-            <p class="lead">
-                <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
-              <a href="/moodchoose" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
-            </p>
+              <p class="lead">Using sentiment analysis on your Twitter feed, we can suggest GIFs based on your emotional state!</p>
+
+            {% if logged_in %}
+              <p class="lead">
+                  <a href="/twitter/auth" class="btn btn-lg btn-default">Analyze My Tweets!</a>
+                <a href="/moodchoose" class="btn btn-lg btn-default">No Twitter account? No problem!</a>
+              </p>
+
+            {% else %}
+              <h2 class="lead"> <a href='/page/login'>Login</a> to find out how you're feeling! </h2>
+              <h2 class="lead"> or <a href='/page/register'>Make an account here.</a></h2>
+
+            {% endif %}
       </form>
           </section>
           <div class="result">

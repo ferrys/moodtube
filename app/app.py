@@ -36,7 +36,7 @@ users = cursor.fetchall()
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template('index.html',logged_in=flask_login.current_user.is_authenticated)
 
 
 
@@ -48,17 +48,11 @@ def login():
 
 @app.route('/logout')
 def logout():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
     return loginmanagement.logout()
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return loginmanagement.unauthorized_handler()
-
-#we can specify specific methods (GET/POST) in function header
-@app.route("/register", methods=['GET'])
-def register():
-    return registration.register()
 
 @app.route("/register", methods=['POST'])
 def register_user():
@@ -79,16 +73,15 @@ def request_loader(request):
 ####### GIPHY #######
 @app.route("/giphy", methods=["POST"])
 @flask_login.login_required
-def call_giphy_api(search=None):
+def call_giphy_api(search=None, message=''):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
-    message = ""
     if search == None:
         search_value = request.form.get('keyword')
     else:
         search_value = search
     # pass parsed api contents in `result` to html
     api_key = app.config['GFY_KEY']
-    data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=5").read())
+    data = json.loads(urlopen("http://api.giphy.com/v1/gifs/search?q="+("+".join(search_value.split(" "))) +"&api_key="+ api_key +"&limit=20").read())
     print(data)
     urls = []
 
@@ -101,9 +94,9 @@ def call_giphy_api(search=None):
         print(likes.find_like(uid, element["embed_url"]))
         like_text = "Unlike!" if likes.find_like(uid, element["embed_url"]) != () else "Like!"
         dislike_text = "Un-dislike!" if dislikes.find_dislike(uid, element["embed_url"]) != () else "Dislike!"
-        urls += [(element["embed_url"], like_text, dislike_text)]
+        urls += [(element["embed_url"], like_text, dislike_text, search_value)]
     print(urls)
-    return render_template('index.html', result=urls,tones=search_value,message=message)
+    return render_template('index.html', result=urls,tones=search_value,message=message,logged_in=flask_login.current_user.is_authenticated)
 
 ##### END GIPHY ########
 
@@ -113,31 +106,32 @@ def call_giphy_api(search=None):
 
 @app.route("/page/login", methods=["GET"])
 def show_login_page():
-    print (user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
-    return render_template("login.html")
+    return render_template("login.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/register",methods=["GET"])
 def show_register_page():
-    return render_template("register.html")
+    return render_template("register.html",logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/likes", methods=["GET"])
 @flask_login.login_required
 def show_likes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
-    return render_template("likes.html", result=urls, message="Likes!")
+    urls = reversed(urls)
+    return render_template("likes.html", result=urls, message="Likes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/dislikes", methods=["GET"])
 @flask_login.login_required
 def show_dislikes_page():
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in dislikes.get_dislikes(uid)]
-    return render_template("dislikes.html", result=urls, message="Dislikes!")
+    urls = reversed(urls)
+    return render_template("dislikes.html", result=urls, message="Dislikes!", logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])
 @flask_login.login_required
 def show_moodchoose_page():
-    return render_template("moodchoose.html")
+    return render_template("moodchoose.html",logged_in=flask_login.current_user.is_authenticated)
 
 ###### END SHOW PAGES########
 
@@ -149,20 +143,25 @@ def like_unlike():
     if request.method == 'POST':
         embedded_url = request.form.get('likes')
         like_value = request.form.get('like_value')
+        search = request.form.get("tone")
         if like_value == "Like!":
-            return like_gif(embedded_url)
+            return like_gif(embedded_url, search)
         else:
-            return unlike_gif(embedded_url)
+            return unlike_gif(embedded_url,search)
 
-def like_gif(embedded_url):
+def like_gif(embedded_url, search):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.set_likes(uid, embedded_url)
-    return render_template('index.html', message="GIF Liked!")
+    if search == 'N/A':
+        return show_likes_page()
+    return call_giphy_api(search, message="GIF Liked!")
 
-def unlike_gif(embedded_url):
+def unlike_gif(embedded_url, search):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.remove_like(uid, embedded_url)
-    return render_template('index.html', message="GIF Unliked!")
+    if search == 'N/A':
+        return show_likes_page()
+    return call_giphy_api(search, message="GIF Unliked!")
 
 
 @app.route('/page/dislikes', methods=['POST'])
@@ -171,21 +170,25 @@ def dislike_undislike():
     if request.method == 'POST':
         embedded_url = request.form.get('dislikes')
         like_value = request.form.get('dislike_value')
+        search = request.form.get("tone")
         if like_value == "Dislike!":
-            return dislike_gif(embedded_url)
+            return dislike_gif(embedded_url, search)
         else:
-            return undislike_gif(embedded_url)
+            return undislike_gif(embedded_url, search)
 
-def undislike_gif(embedded_url):
+def undislike_gif(embedded_url, search):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
-    print(uid,embedded_url)
     dislikes.remove_dislike(uid, embedded_url)
-    return render_template('index.html', message="GIF Un-disliked!")
+    if search == 'N/A':
+        return show_dislikes_page()
+    return call_giphy_api(search, message="GIF Un-disliked!")
 
-def dislike_gif(embedded_url):
+def dislike_gif(embedded_url, search):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     dislikes.set_dislikes(uid, embedded_url)
-    return render_template('index.html', message="GIF Disliked!")
+    if search == 'N/A':
+        return show_dislikes_page()
+    return call_giphy_api(search, message="GIF Disliked!")
 
 #### END / DISLIKES ####
 
@@ -238,6 +241,13 @@ def tweet():
     tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
     return call_giphy_api(search=tones)
 ##### END TWITTER ######
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html', logged_in=flask_login.current_user.is_authenticated), 500
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('500.html', logged_in=flask_login.current_user.is_authenticated), 404
 
 if __name__ == "__main__":
     app.run()

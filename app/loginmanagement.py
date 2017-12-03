@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, escape
 from flaskext.mysql import MySQL
 import flask_login
+import re
 
 #mySQL loading
 mysql = MySQL()
@@ -23,7 +24,7 @@ def getUsers():
     cursor.execute("SELECT email FROM Users")
     return cursor.fetchall()
 
-class User(flask_login.UserMixin):
+class User(flask_login.UserMixin, flask_login.AnonymousUserMixin):
     def __init__(self):
         app = Flask(__name__)
         self.mysql = MySQL()
@@ -52,16 +53,9 @@ class User(flask_login.UserMixin):
         cursor.execute(query)
         self.conn.commit()
 
-
-    def get_user_id_from_username(self, username):
+    def get_name(self, user_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT user_id FROM Users WHERE username = '{0}'".format(username))
-        response = cursor.fetchone()[0]
-        return response
-
-    def get_username(self, user_id):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT username FROM Users WHERE user_id = '{0}'".format(user_id))
+        cursor.execute("SELECT first_name FROM Users WHERE user_id = '{0}'".format(user_id))
         response = cursor.fetchone()[0]
         return response
 
@@ -71,7 +65,7 @@ class User(flask_login.UserMixin):
         cursor.execute("SELECT twitter_username FROM Users WHERE user_id = '{0}'".format(user_id))
         response = cursor.fetchone()
         return response[0]
-
+    
 @login_manager.user_loader
 def user_loader(email):
     users = getUsers()
@@ -92,8 +86,6 @@ def request_loader(request):
     cursor = mysql.connect().cursor()
     cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email))
     data = cursor.fetchall()
-    pwd = str(data[0][0] )
-    user.is_authenticated = request.form['password'] == pwd
     return user 
 
 def getUserIdFromEmail(email):
@@ -113,63 +105,69 @@ def isEmailUnique(email):
     
 def login():
     if request.method == 'GET':
-        return '''
-               <form action='login' method='POST'>
-                <input type='text' name='email' id='email' placeholder='email'></input>
-                <input type='password' name='password' id='password' placeholder='password'></input>
-                <input type='submit' name='submit'></input>
-               </form></br>
-           <a href='/'>Home</a>
-               '''
+        return render_template("login.html")
     #The request method is POST (page is recieving data)
     email = request.form['email']
+    if email == "":
+        return render_template("login.html", message="Please try again!")
     cursor = conn.cursor()
     #check if email is registered
     if cursor.execute("SELECT password FROM Users WHERE email = '{0}'".format(email)):
         data = cursor.fetchall()
-        pwd = str(data[0][0] )
+        print("!!!")
+        print(data)
+        if data == ():
+            return render_template("login.html", message="Please try again!")
+        pwd = str(data[0][0])
         if request.form['password'] == pwd:
             user = User()
             user.id = email
             flask_login.login_user(user) #okay login in user
-            print(user.is_active,user.is_authenticated,user.is_anonymous,user.get_id)
-            return render_template('index.html', message='Logged in!')
+            return render_template('index.html', name=user.get_name(getUserIdFromEmail(flask_login.current_user.id)),logged_in=flask_login.current_user.is_authenticated)
  
-
     #information did not match
-    return "<a href='/login'>Try again</a>\
-            </br><a href='/register'>or make an account</a>"
+    return render_template('login.html', message="Please try again!")
 
 def logout():
+    user = User()
+    name=user.get_name(getUserIdFromEmail(flask_login.current_user.id))
+    if name == None:
+        name = ""
     flask_login.logout_user()
-    return render_template('index.html', message='Logged out')
+    return render_template('index.html', message='Goodbye '+name+'!',logged_in=flask_login.current_user.is_authenticated)
 
 def unauthorized_handler():
-    return render_template('unauth.html')
+    return render_template('unauth.html',logged_in=flask_login.current_user.is_authenticated)
 
 def register():
-    return render_template('register.html', supress='True')
+    return render_template('register.html', supress='True',logged_in=flask_login.current_user.is_authenticated)
 
 def register_user():
     try:
-        username=request.form.get('name')
+        first_name=request.form.get('first_name')
+        last_name=request.form.get('last_name')
         email=request.form.get('email')
         password=request.form.get('password')
     except:
         print("couldn't find all tokens")
-        return flask.redirect(flask.url_for('register'))
+        return render_template("register.html", suppress=False, message="Please try again!")
+    print(first_name)
+    if first_name == "" or last_name == "" or email == "" or password == "":
+        return render_template("register.html", suppress=False, message="All fields are required.")
     cursor = conn.cursor()
     unique =  isEmailUnique(email)
-    if unique:
-        cursor.execute("INSERT INTO Users (username, email, password) VALUES ('{0}', '{1}', '{2}')".format(username, email, password))
+    valid = re.match(r"[^@]+@[^@]+\.[^@]+", email)
+    if unique and valid:
+        cursor.execute("INSERT INTO Users (first_name, last_name, email, password) VALUES ('{0}', '{1}', '{2}', '{3}')".format(first_name,last_name, email, password))
         conn.commit()
         #log user in
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return render_template('index.html', name=username, message='Account Created!')
+        return render_template('index.html', name=first_name, message='Account Created!',logged_in=flask_login.current_user.is_authenticated)
     else:
         print("couldn't find all tokens")
-        return render_template("register.html", suppress=False)
+        return render_template("register.html", suppress=False, message="Please try again with a unique and valid email!", logged_in=flask_login.current_user.is_authenticated)
+
 
 
