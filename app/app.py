@@ -69,11 +69,11 @@ def user_loader(email):
   return loginmanagement.user_loader(email)
 
 @login_manager.request_loader
-def request_loader(request): 
+def request_loader(request):
   return loginmanagement.request_loader(request)
 
 ###### END LOGIN ######
-    
+
 
 
 ####### GIPHY #######
@@ -158,13 +158,13 @@ def like_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.set_likes(uid, embedded_url)
     return render_template('index.html', message="GIF Liked!")
-    
+
 def unlike_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     likes.remove_like(uid, embedded_url)
     return render_template('index.html', message="GIF Unliked!")
-    
-    
+
+
 @app.route('/page/dislikes', methods=['POST'])
 @flask_login.login_required
 def dislike_undislike():
@@ -175,7 +175,7 @@ def dislike_undislike():
             return dislike_gif(embedded_url)
         else:
             return undislike_gif(embedded_url)
-        
+
 def undislike_gif(embedded_url):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     print(uid,embedded_url)
@@ -227,6 +227,16 @@ def get_twitter_token():
     tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
     return call_giphy_api(search=tones)
 
+@app.route("/tweet",methods=["POST"])
+@flask_login.login_required
+def tweet():
+    user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    tweet = request.form.get('tweet')
+    print("Twitter Post Response:")
+    print(twitter.post_tweet(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,tweet))
+    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
+    tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
+    return call_giphy_api(search=tones)
 ##### END TWITTER ######
 
 if __name__ == "__main__":

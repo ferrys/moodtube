@@ -25,7 +25,7 @@
             display: inline-block;
         }
         .box { display:inline-block; }
-        
+
     </style>
     </head>
 
@@ -46,6 +46,7 @@
               {% endif %}
               {% if result %}
                   {% for url in result %}
+
                   <div class="box">
                       <iframe src={{url[0]}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <div class="lead">
@@ -57,7 +58,19 @@
                     			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
                            </form>
-                          <a href="/page/likes" class="btn btn-lg btn-default">share ME!</a>
+                           <script type="text/javascript">
+                               function myFunction(x,y) {
+    	                            document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
+                                  document.getElementById(y).style.display = 'none';
+
+	                             }
+                               function revert(x,y) {
+                                 document.getElementById(x).innerHTML = "<p id="+x+"></p>"
+                                 document.getElementById(y).style.display ='inline'
+                               }
+                          </script>
+                          <p id={{url[0]}}></p>
+                          <button type="button" id='{{ loop.index }}' onclick="myFunction('{{url[0]}}','{{ loop.index }}')">Share</button>
                       </div>
                     <div>
                   {% endfor %}

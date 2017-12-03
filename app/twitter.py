@@ -3,6 +3,7 @@ from tokens import Tokens
 import loginmanagement
 import json
 from watson_developer_cloud import ToneAnalyzerV3
+import urllib
 
 #steps 1 and 2 of authorization
 def authorize_init(key, secret, user_id):
@@ -18,6 +19,7 @@ def authorize_init(key, secret, user_id):
 	# The OAuth Client request works just like httplib2 for the most part.
 	resp, content = client.request(request_token_url, "GET")
 	#print(resp["oauth_token"])
+	print(content)
 	oauth_token = str(content)[1:].split("&")[0].split("=")[1]
 	oauth_secret = str(content)[1:].split("&")[1].split("=")[1]
 	print(oauth_token,oauth_secret)
@@ -96,6 +98,21 @@ def generate_url(screen_name,count,max_id):
 		url+=max_id
 	return url
 
+def post_tweet(key,secret,user_id,tweet):
+	consumer = oauth.Consumer(key=key, secret=secret)
+	db = Tokens()
+	token = db.get_oauth_twitter_tokens(user_id)
+	key = token[0]
+	secret = token[1]
+	twitter_token = oauth.Token(key,secret)
+	client = oauth.Client(consumer,twitter_token)
+	url = "https://api.twitter.com/1.1/statuses/update.json?"
+	encoded = urllib.parse.quote(tweet,safe='')
+	url = url+"status="+encoded
+	print(url)
+	resp,content = client.request(url,"POST")
+	return resp, content
+
 
 def get_tone(username, password, text):
 	if text == "":
@@ -117,4 +134,4 @@ def get_tone(username, password, text):
 	return " ".join(tones_list)
 
 if __name__ == "__main__":
-	authorize_init()
+	post_tweet("blah","blah","blah","http://google.com/google this")
