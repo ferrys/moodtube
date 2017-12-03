@@ -25,7 +25,6 @@
             display: inline-block;
         }
 
-        
     </style>
     </head>
 
@@ -53,22 +52,35 @@
               {% endif %}
               {% if result %}
                   {% for url in result %}
-                          <iframe src={{url[0]}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                           <div class="lead">
-                               <form method="post" action="/page/likes">
-                        			<input type="text" name="likes" value="{{ url[0] }}" hidden="true">
-                                    <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
-                        			<input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
-                               </form>
-                              <form method="post" action="/page/dislikes">
-                        			<input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
-                                    <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
-                        			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
-                               </form>
-                               <form method="post" action="/">
-                                  <input type="submit" class="btn btn-lg btn-default" value="Share">
-                              </form>
-                          </div>
+
+                  <div class="box">
+                      <iframe src={{url[0]}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                       <div class="lead">
+                         <form method="post" action="/page/likes">
+                        <input type="text" name="likes" value="{{ url[0] }}" hidden="true">
+                              <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        <input type="submit" class="btn btn-lg btn-default" name="like_value" value="{{ url[1] }}">
+                         </form>
+                        <form method="post" action="/page/dislikes">
+                        <input type="text" name="dislikes" value="{{ url[0] }}" hidden="true">
+                              <input type="text" name="tone" value="{{ url[3] }}" hidden="true">
+                        <input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="{{ url[2] }}">
+                         </form>
+                           <script type="text/javascript">
+                               function myFunction(x,y) {
+    	                            document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
+                                  document.getElementById(y).style.display = 'none';
+
+	                             }
+                               function revert(x,y) {
+                                 document.getElementById(x).innerHTML = "<p id="+x+"></p>"
+                                 document.getElementById(y).style.display ='inline'
+                               }
+                          </script>
+                          <p id={{url[0]}}></p>
+                          <button type="button" id='{{ loop.index }}' onclick="myFunction('{{url[0]}}','{{ loop.index }}')">Share</button>
+                      </div>
+                    <div>
                   {% endfor %}
               {% endif %}
             </div>
