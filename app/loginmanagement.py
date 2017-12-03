@@ -131,8 +131,10 @@ def login():
 def logout():
     user = User()
     name=user.get_name(getUserIdFromEmail(flask_login.current_user.id))
+    if name == None:
+        name = ""
     flask_login.logout_user()
-    return render_template('index.html', message='Goodbye '+name+"!",logged_in=flask_login.current_user.is_authenticated)
+    return render_template('index.html', message='Goodbye '+name+'!',logged_in=flask_login.current_user.is_authenticated)
 
 def unauthorized_handler():
     return render_template('unauth.html',logged_in=flask_login.current_user.is_authenticated)
