@@ -233,6 +233,9 @@ def get_twitter_token():
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template('500.html', logged_in=flask_login.current_user.is_authenticated), 500
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('500.html', logged_in=flask_login.current_user.is_authenticated), 404
 
 if __name__ == "__main__":
     app.run()
