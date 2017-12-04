@@ -201,7 +201,8 @@ def dislike_gif(embedded_url, search):
 @flask_login.login_required
 def twitter_auth():
     user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
-    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id))
+    logged_in=flask_login.current_user.is_authenticated
+    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id),logged_in)
 
 @app.route("/twitter/",methods=["GET"])
 @flask_login.login_required
