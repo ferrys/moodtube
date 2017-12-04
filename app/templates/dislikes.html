@@ -18,13 +18,13 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  
+
       <style>
         form {
             display: inline-block;
         }
       </style>
-    
+
   </head>
 
   <body>
@@ -43,14 +43,26 @@
               {% if result %}
                   {% for url in result %}
                       <iframe src={{url}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                       <p class="lead"> 
+                       <p class="lead">
                        <form method="post" action="/page/dislikes">
                     			<input type="text" name="dislikes" value="{{ url }}" hidden="true">
                                 <input type="text" name="tone" value="N/A" hidden="true">
                     			<input type="submit" class="btn btn-lg btn-default" name="dislike_value" value="Un-dislike!">
                         </form>
+                        <script type="text/javascript">
+                            function myFunction(x,y) {
+                               document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><input id='source' type='hidden' name = 'from'  value = 'dislikes'/><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
+                               document.getElementById(y).style.display = 'none';
 
-                      <a href="/page/share" class="btn btn-lg btn-default">shareME!</a>
+                            }
+                            function revert(x,y) {
+                              document.getElementById(x).innerHTML = "<p id="+x+"></p>"
+                              document.getElementById(y).style.display ='inline'
+                            }
+                       </script>
+                       <p id={{url}}></p>
+                       <button type="button" id='{{ loop.index }}' onclick="myFunction('{{url}}','{{ loop.index }}')">Share</button>
+
                       </p>
                   {% endfor %}
 

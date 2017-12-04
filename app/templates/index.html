@@ -68,7 +68,7 @@
                          </form>
                            <script type="text/javascript">
                                function myFunction(x,y) {
-    	                            document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
+    	                            document.getElementById(x).innerHTML = "<form method='post' id="+x+" action = '/tweet'><textarea cols = '50' rows = '10' name='tweet' class='form-control' style='resize:vertical' >Check out this Giphy! "+x+" </textarea><input id='source' type='hidden' name = 'from'  value = 'index'/><button type='submit' onclick='revert("+x+","+y+")' name = 'keyword' class='btn btn-success btn-lg'id='Tweet'>Tweet!</button></form>";
                                   document.getElementById(y).style.display = 'none';
 
 	                             }

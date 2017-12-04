@@ -235,11 +235,18 @@ def get_twitter_token():
 def tweet():
     user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     tweet = request.form.get('tweet')
+    source = request.form.get('from')
+
     print("Twitter Post Response:")
     print(twitter.post_tweet(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,tweet))
-    tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
-    tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
-    return call_giphy_api(search=tones)
+    if source == "index":
+        tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
+        tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
+        return call_giphy_api(search=tones)
+    elif source == "likes":
+        return show_likes_page()
+    elif source == "dislikes":
+        return show_dislikes_page()
 ##### END TWITTER ######
 
 @app.errorhandler(500)
