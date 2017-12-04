@@ -25,10 +25,6 @@
         form {
             display: inline-block;
         }
-        .btn btn-lg btn-default {
-            display: inline-block;
-        }
-
     </style>
     </head>
 
@@ -58,7 +54,7 @@
                   {% for url in result %}
 
                   <div class="box">
-                      <iframe src={{url[0]}} width="480" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                      <iframe src={{url[0]}} width="960" height="400" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
                        <div class="lead">
                          <form method="post" action="/page/likes">
                         <input type="text" name="likes" value="{{ url[0] }}" hidden="true">
