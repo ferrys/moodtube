@@ -44,6 +44,9 @@
             {% if name %}
                  <h3>Welcome, {{ name }}!</h3>
             {% endif %}
+            {% if success %}
+                <p class="lead">{{success}}</p>
+            {% endif %}
               {% if tones %}
                 <p class="lead">{{tones}}</p>
               {% endif %}

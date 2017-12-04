@@ -73,7 +73,7 @@ def request_loader(request):
 ####### GIPHY #######
 @app.route("/giphy", methods=["POST"])
 @flask_login.login_required
-def call_giphy_api(search=None, message=''):
+def call_giphy_api(search=None, message='', success=''):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     if search == None:
         search_value = request.form.get('keyword')
@@ -96,7 +96,7 @@ def call_giphy_api(search=None, message=''):
         dislike_text = "Un-dislike!" if dislikes.find_dislike(uid, element["embed_url"]) != () else "Dislike!"
         urls += [(element["embed_url"], like_text, dislike_text, search_value)]
     print(urls)
-    return render_template('index.html', result=urls,tones=search_value,message=message,logged_in=flask_login.current_user.is_authenticated)
+    return render_template('index.html', result=urls,tones=search_value,message=message,success=success, logged_in=flask_login.current_user.is_authenticated)
 
 ##### END GIPHY ########
 
@@ -114,19 +114,19 @@ def show_register_page():
 
 @app.route("/page/likes", methods=["GET"])
 @flask_login.login_required
-def show_likes_page():
+def show_likes_page(success=""):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in likes.get_likes(uid)]
     urls = reversed(urls)
-    return render_template("likes.html", result=urls, message="Likes!", logged_in=flask_login.current_user.is_authenticated)
+    return render_template("likes.html", result=urls, message="Likes!", success=success, logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/page/dislikes", methods=["GET"])
 @flask_login.login_required
-def show_dislikes_page():
+def show_dislikes_page(success=""):
     uid = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     urls = [x[0] for x in dislikes.get_dislikes(uid)]
     urls = reversed(urls)
-    return render_template("dislikes.html", result=urls, message="Dislikes!", logged_in=flask_login.current_user.is_authenticated)
+    return render_template("dislikes.html", result=urls, message="Dislikes!",success=success, logged_in=flask_login.current_user.is_authenticated)
 
 @app.route("/moodchoose", methods=["GET"])
 @flask_login.login_required
@@ -202,7 +202,7 @@ def dislike_gif(embedded_url, search):
 def twitter_auth():
     user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     logged_in=flask_login.current_user.is_authenticated
-    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id),logged_in)
+    return redirect(twitter.authorize_init(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id))
 
 @app.route("/twitter/",methods=["GET"])
 @flask_login.login_required
@@ -246,11 +246,11 @@ def tweet():
     if source == "index":
         tweets = twitter.get_tweets(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],user_id,20)
         tones = twitter.get_tone(app.config['IBM_USERNAME'],app.config['IBM_PASSWORD'],tweets)
-        return call_giphy_api(search=tones)
+        return call_giphy_api(search=tones, success="Tweet posted!")
     elif source == "likes":
-        return show_likes_page()
+        return show_likes_page(success="Tweet posted!")
     elif source == "dislikes":
-        return show_dislikes_page()
+        return show_dislikes_page(success="Tweet posted!")
 ##### END TWITTER ######
 
 @app.errorhandler(500)

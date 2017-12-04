@@ -37,6 +37,9 @@
         <div class="cover-container">
           <div class="masthead clearfix">
             <div class="inner">
+            {% if success %}
+                <p class="lead">{{success}}</p>
+            {% endif %}
                 {% if message %}
                     <h3>{{message}}</h3>
                 {% endif %}

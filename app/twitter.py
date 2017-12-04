@@ -33,7 +33,7 @@ def authorize_init(key, secret, user_id):
     resp, content = client.request(url, "GET")
     print(resp['content-location'])
 
-    return resp['content-location']
+    return resp['content-location'] + "&logged_in=true"
 
 #step 3 of authorization
 def authorize_final(key, secret, token, verifier):
