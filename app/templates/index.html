@@ -17,11 +17,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="http://code.jquery.com/jquery.js"></script>
 
     <style>
         form {
+            display: inline-block;
+        }
+        .btn btn-lg btn-default {
             display: inline-block;
         }
 
@@ -78,7 +82,7 @@
                                }
                           </script>
                           <p id={{url[0]}}></p>
-                          <button type="button" id='{{ loop.index }}' onclick="myFunction('{{url[0]}}','{{ loop.index }}')">Share</button>
+                          <button type="button" class="btn btn-lg btn-default" id='{{ loop.index }}' onclick="myFunction('{{url[0]}}','{{ loop.index }}')">Share</button>
                       </div>
                     <div>
                   {% endfor %}

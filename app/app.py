@@ -213,7 +213,6 @@ def get_twitter_token():
     response = twitter.authorize_final(app.config['TWITTER_KEY'],app.config['TWITTER_SECRET'],token,verifier)
     print("Twitter Auth Info:")
     print(response)
-    # change this once we get a real user id from the native login
     user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
     token = response[0].split("=")[1]
     secret = response[1].split("=")[1]
@@ -234,6 +233,10 @@ def get_twitter_token():
 @flask_login.login_required
 def tweet():
     user_id = loginmanagement.getUserIdFromEmail(flask_login.current_user.id)
+    if tokens.get_oauth_twitter_tokens(user_id) == None:
+        return twitter_auth()
+    if tokens.get_oauth_twitter_tokens(user_id)[0] == None or tokens.get_oauth_twitter_tokens(user_id)[1] == None:
+        return twitter_auth()
     tweet = request.form.get('tweet')
     source = request.form.get('from')
 
