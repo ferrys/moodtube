@@ -24,6 +24,7 @@ def getUsers():
     cursor.execute("SELECT email FROM Users")
     return cursor.fetchall()
 
+# user connection to database
 class User(flask_login.UserMixin, flask_login.AnonymousUserMixin):
     def __init__(self):
         app = Flask(__name__)
@@ -33,11 +34,10 @@ class User(flask_login.UserMixin, flask_login.AnonymousUserMixin):
         self.conn = self.mysql.connect()
 
     # returns user_id of user who was just created
-    def create_user(self, username, password):
+    def create_user(self, first_name, last_name, email, password):
         #user_id must be unique
         cursor = self.conn.cursor()
-        query = "INSERT INTO Users(username, password) VALUES ('{0}', '{1}')".format(username, password)
-        cursor.execute(query)
+        cursor.execute("INSERT INTO Users (first_name, last_name, email, password) VALUES ('{0}', '{1}', '{2}', '{3}')".format(first_name,last_name, email, password))
         self.conn.commit()
         return cursor.lastrowid
 
@@ -94,7 +94,7 @@ def getUserIdFromEmail(email):
         return cursor.fetchone()[0]
     else:
         return None
- 
+
 def isEmailUnique(email):
     #use this to check if a email has already been registered
     cursor = conn.cursor()
@@ -143,6 +143,7 @@ def register():
     return render_template('register.html', supress='True',logged_in=flask_login.current_user.is_authenticated)
 
 def register_user():
+    user = User()
     try:
         first_name=request.form.get('first_name')
         last_name=request.form.get('last_name')
@@ -158,8 +159,7 @@ def register_user():
     unique =  isEmailUnique(email)
     valid = re.match(r"[^@]+@[^@]+\.[^@]+", email)
     if unique and valid:
-        cursor.execute("INSERT INTO Users (first_name, last_name, email, password) VALUES ('{0}', '{1}', '{2}', '{3}')".format(first_name,last_name, email, password))
-        conn.commit()
+        user.create_user(first_name, last_name, email, password)
         #log user in
         user = User()
         user.id = email

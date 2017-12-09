@@ -18,20 +18,15 @@ def authorize_init(key, secret, user_id):
 
     # The OAuth Client request works just like httplib2 for the most part.
     resp, content = client.request(request_token_url, "GET")
-    #print(resp["oauth_token"])
-    print(content)
     oauth_token = str(content)[1:].split("&")[0].split("=")[1]
     oauth_secret = str(content)[1:].split("&")[1].split("=")[1]
-    print(oauth_token,oauth_secret)
     db = Tokens()
     db.set_temp_twitter_key(user_id, oauth_token,oauth_secret)
-    print(db.get_temp_twitter_key(oauth_token))
 
     url = "https://api.twitter.com/oauth/authenticate?force_login=true"
     token = oauth.Token(key=oauth_token, secret=oauth_secret)
     client = oauth.Client(consumer, token)
     resp, content = client.request(url, "GET")
-    print(resp['content-location'])
 
     return resp['content-location'] + "&logged_in=true"
 
@@ -48,14 +43,17 @@ def authorize_final(key, secret, token, verifier):
     resp,content = client.request(url,"POST")
     content.decode("utf-8")
     db.del_temp_twitter_key(token)
+    
     return content.decode("utf-8").split("&")
 
+# get user's most recent tweets
 def get_tweets(key,secret,user_id,number):
-    if(number >3200):
+    # twitter max
+    if(number > 3200):
         number = 3200
     db = loginmanagement.User()
     screen_name = db.get_twitter_info(user_id)
-    print(screen_name)
+
     url = generate_url(screen_name,number,None)
     consumer = oauth.Consumer(key=key, secret=secret)
     db = Tokens()
@@ -79,12 +77,13 @@ def get_tweets(key,secret,user_id,number):
         tweets+=jsoned
         remaining -= len(jsoned)
         url = generate_url(screen_name,remaining,jsoned[-1]["id_str"])
-    print(len(tweets))
+
     text = ""
     for i in tweets:
         text+= i["text"]+"\n"
     return text
 
+# generate proper redirect url
 def generate_url(screen_name,count,max_id):
     url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name="
     url+=screen_name
@@ -98,6 +97,7 @@ def generate_url(screen_name,count,max_id):
         url+=max_id
     return url
 
+# post tweet to users timeline
 def post_tweet(key,secret,user_id,tweet):
     consumer = oauth.Consumer(key=key, secret=secret)
     db = Tokens()
@@ -113,7 +113,7 @@ def post_tweet(key,secret,user_id,tweet):
     resp,content = client.request(url,"POST")
     return resp, content
 
-
+# watson analysis of twitter contents
 def get_tone(username, password, text):
     if text == "":
         return "No tweets"
@@ -124,7 +124,6 @@ def get_tone(username, password, text):
           password=password
     )
     response = tone_analyzer.tone(text, tones='emotion', content_type='text/plain')
-    print(response)
     tones_json = response["document_tone"]["tones"]
     tones_list = []
 

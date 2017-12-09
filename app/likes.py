@@ -1,5 +1,6 @@
 from flask import Flask
 from flaskext.mysql import MySQL
+#connector to Likes table of database
 class Likes(object):
     def __init__(self):
         app = Flask(__name__)
