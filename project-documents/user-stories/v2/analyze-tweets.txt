@@ -1,0 +1,5 @@
+As an authenticated user I will see a home screen with two buttons: an “Analyze My Tweets!” button and a “No Twitter account? No problem!” button.
+	
+If I click “No Twitter account? No problem!” I will be directed to the mood_choose user story. 
+
+If I click “Analyze My Tweets!” I will be redirected to a twitter authentication page. Once I log in to my twitter, the homepage will update with GIFs to reflect my mood based on Twitter sentiment analysis.

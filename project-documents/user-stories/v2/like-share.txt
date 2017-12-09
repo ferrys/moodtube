@@ -1,0 +1,8 @@
+As an authenticated user, once I have chosen a method from the analyze-tweets user story, I will see GIFs on the homepage. I am then given the option to “Like,” “Dislike,” or “Share,” the GIF. If I have liked or disliked the image in the past, the button will be updated to “Unlike” or “Un-dislike”.
+
+If I click on “Like”/“Unlike” and I have not liked the GIF in the past, it will be saved to my Likes. If I have liked the GIF in the past, it will be removed from my Likes. If I click on “Dislike”/“Un-dislike” and I have not disliked the GIF/image in the past it will be saved to my Dislikes. If I have disliked the GIF/image in the past, it will be removed from my Dislikes. 
+
+If I click on “Share,” I will be shown a text box where I can draft a Twitter post. I can choose to write a Tweet and share. 
+
+I can also access this user story once I am in the view-likes user story.
+

@@ -1,0 +1,5 @@
+As an unauthenticated user, I will see a screen asking me to log in or make an account. If I do not already have an account, I will click the register button where I will forms to enter my first name, last name, unique email address, and password.
+
+If I already have an account, I can click on the login button, where I will see a form to enter my email and password.
+
+If the login is successful, I will be redirected to the application’s home screen which will allow me to follow the analyze-tweets user story or the view-likes user story. If the login is unsuccessful, I will be directed to an error page which will ask me to try logging in again.

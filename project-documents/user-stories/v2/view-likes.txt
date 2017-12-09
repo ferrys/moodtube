@@ -1,0 +1,1 @@
+As an authenticated user, I will see a button in the top menu bar that will direct me to my liked GIFs/images and another button that will direct me to my disliked GIFs/images. If I click on either button it will redirect me to a new page which contains the GIFs/images that I either liked or disliked, respectively. 

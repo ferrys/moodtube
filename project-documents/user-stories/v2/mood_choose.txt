@@ -1,0 +1,1 @@
+As an authenticated user, if I click on the “moodCHOOSE” button in the top menu bar, I will be redirected to the moodCHOOSE page, where I am given a list of options including common moods with keywords such as “sad,” “angry,” or “happy.” If I click on an option, the home page will be updated to show GIFs/images that reflect my choice.

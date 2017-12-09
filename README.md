@@ -1,6 +1,10 @@
 # moodtube
 Group project for CS 411
 
+Giphy API (https://developers.giphy.com) to search for GIFs
+Twitter API (https://developer.twitter.com/en/docs) to get users tweets and post tweets
+Watson ToneAnalyzer (https://www.ibm.com/watson/services/tone-analyzer/) to analyze sentiment
+
 ### To run app:
 
 `pip install flask`

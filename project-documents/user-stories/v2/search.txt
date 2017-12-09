@@ -1,0 +1,1 @@
+As an authenticated user, I will see a search form in the top menu bar. If I type a keyword and click search, I will be displayed GIF’s related to my search and have the opportunity to follow the like-share user story.
